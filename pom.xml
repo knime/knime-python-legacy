@@ -9,7 +9,7 @@
 	</parent>
 
 	<groupId>org.knime</groupId>
-	<artifactId>knime-python</artifactId>
+	<artifactId>knime-python-legacy</artifactId>
 	<version>${revision}${changelist}</version>
 	<packaging>pom</packaging>
 
@@ -38,7 +38,7 @@
 		<module>org.knime.python2.serde.flatbuffers.tests</module>
 		<module>org.knime.python.nodes</module>
 		<module>org.knime.python.typeextensions</module>
-		<module>org.knime.update.python</module>
+		<module>org.knime.update.python.legacy</module>
 	</modules>
 
 	<!-- List all required repositories here. The variables are defined in knime-maven-parent/pom.xml. -->

@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.knime</groupId>
-		<artifactId>knime-python</artifactId>
+		<artifactId>knime-python-legacy</artifactId>
 		<version>${revision}${changelist}</version>
 	</parent>
 	<artifactId>org.knime.python2.tests</artifactId>
