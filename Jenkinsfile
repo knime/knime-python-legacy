@@ -21,7 +21,7 @@ properties([
 ])
 
 try {
-    knimetools.defaultTychoBuild('org.knime.update.python', 'maven && python2 && python3 && java11')
+    knimetools.defaultTychoBuild('org.knime.update.python.legacy', 'maven && python2 && python3 && java11')
 
     def parallelConfigs = [:]
     for (py in PYTHON_VERSIONS) {
@@ -70,7 +70,7 @@ def runPython27WorkflowTests(String baseBranch){
               "KNIME_MSSQLSERVER_USER=sa", "KNIME_MSSQLSERVER_PASSWORD=@SaPassword123",]){
 
         workflowTests.runTests(
-            testflowsDir: "Testflows (${baseBranch})/knime-python/python2.7",
+            testflowsDir: "Testflows (${baseBranch})/knime-python-legacy/python2.7",
             dependencies: [
                 repositories: [
                     'knime-chemistry',
@@ -84,7 +84,7 @@ def runPython27WorkflowTests(String baseBranch){
                     'knime-jfreechart',
                     'knime-js-base',
                     'knime-kerberos',
-                    'knime-python',
+                    'knime-python-legacy',
                     'knime-core-columnar',
                     'knime-core-arrow',
                     'knime-testing-internal',
@@ -115,7 +115,7 @@ def runPython3MultiversionWorkflowTestConfig(String pythonVersion, String baseBr
     withEnv([ "KNIME_WORKFLOWTEST_PYTHON_VERSION=${pythonVersion}" ]) {
         stage("Workflowtests with Python: ${pythonVersion}") {
             workflowTests.runTests(
-                testflowsDir: "Testflows (${baseBranch})/knime-python/python3.multiversion",
+                testflowsDir: "Testflows (${baseBranch})/knime-python-legacy/python3.multiversion",
                 dependencies: [
                     repositories: [
                         'knime-chemistry',
@@ -129,7 +129,7 @@ def runPython3MultiversionWorkflowTestConfig(String pythonVersion, String baseBr
                         'knime-jfreechart',
                         'knime-js-base',
                         'knime-kerberos',
-                        'knime-python',
+                        'knime-python-legacy',
                         'knime-core-columnar',
                         'knime-core-arrow',
                         'knime-testing-internal',
