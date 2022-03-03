@@ -56,7 +56,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.SystemUtils;
-import org.knime.python2.conda.Conda;
+import org.knime.conda.Conda;
 
 /**
  * Conda-specific implementation of {@link PythonCommand}. Allows to build Python processes for a given Conda

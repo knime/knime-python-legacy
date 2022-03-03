@@ -50,12 +50,6 @@
       </initializer>
    </extension>
    <extension
-         point="org.knime.core.FlowVariableType">
-      <VariableType
-            extension="org.knime.python2.CondaEnvironmentPropagation$CondaEnvironmentType$CondaEnvironmentTypeExtension">
-      </VariableType>
-   </extension>
-   <extension
          point="org.knime.python2.PythonKernelBackend">
       <PythonKernelBackend
             PythonKernelBackendFactory="org.knime.python2.kernel.Python2KernelBackendFactory">

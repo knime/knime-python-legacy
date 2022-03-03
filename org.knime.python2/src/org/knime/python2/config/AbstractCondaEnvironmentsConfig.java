@@ -51,7 +51,6 @@ package org.knime.python2.config;
 import java.nio.file.Paths;
 
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
-import org.knime.python2.conda.CondaEnvironmentIdentifier;
 
 /**
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
@@ -62,9 +61,6 @@ public abstract class AbstractCondaEnvironmentsConfig implements PythonConfig {
      * Configuration key for the path to the Conda installation directory.
      */
     public static final String CFG_KEY_CONDA_DIRECTORY_PATH = "condaDirectoryPath";
-
-    public static final CondaEnvironmentIdentifier PLACEHOLDER_CONDA_ENV =
-        new CondaEnvironmentIdentifier("no environment available", "no_conda_environment_selected");
 
     private final SettingsModelString m_condaDirectory;
 

@@ -51,12 +51,13 @@ package org.knime.python2.config;
 import java.io.IOException;
 import java.util.List;
 
+import org.knime.conda.Conda;
+import org.knime.conda.CondaEnvironmentIdentifier;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.python2.PythonCommand;
+import org.knime.python2.PythonCondaUtils;
 import org.knime.python2.PythonVersion;
-import org.knime.python2.conda.Conda;
-import org.knime.python2.conda.CondaEnvironmentIdentifier;
 
 /**
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
@@ -122,7 +123,7 @@ public final class CondaEnvironmentConfig extends AbstractPythonEnvironmentConfi
 
     @Override
     public PythonCommand getPythonCommand() {
-        return Conda.createPythonCommand(m_pythonVersion, m_condaDirectory.getStringValue(),
+        return PythonCondaUtils.createPythonCommand(m_pythonVersion, m_condaDirectory.getStringValue(),
             m_environmentDirectory.getStringValue());
     }
 

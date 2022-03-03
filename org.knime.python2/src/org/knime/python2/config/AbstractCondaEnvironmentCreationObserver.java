@@ -50,16 +50,17 @@ package org.knime.python2.config;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.knime.conda.Conda;
+import org.knime.conda.CondaCanceledExecutionException;
+import org.knime.conda.CondaEnvironmentCreationMonitor;
+import org.knime.conda.CondaEnvironmentIdentifier;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelInteger;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.util.Version;
+import org.knime.python2.PythonCondaUtils;
 import org.knime.python2.PythonVersion;
-import org.knime.python2.conda.Conda;
-import org.knime.python2.conda.CondaEnvironmentCreationMonitor;
-import org.knime.python2.conda.CondaEnvironmentIdentifier;
-import org.knime.python2.kernel.PythonCanceledExecutionException;
 
 /**
  * {@link #startEnvironmentCreation(String, CondaEnvironmentCreationStatus) Initiates}, observes, and
@@ -131,9 +132,9 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
             final Conda conda = new Conda(m_condaDirectoryPath.getStringValue());
             final String defaultEnvironmentName;
             if (m_pythonVersion.equals(PythonVersion.PYTHON2)) {
-                defaultEnvironmentName = conda.getPython2EnvironmentName(suffix);
+                defaultEnvironmentName = PythonCondaUtils.getPython2EnvironmentName(conda, suffix);
             } else if (m_pythonVersion.equals(PythonVersion.PYTHON3)) {
-                defaultEnvironmentName = conda.getPython3EnvironmentName(suffix);
+                defaultEnvironmentName = PythonCondaUtils.getPython3EnvironmentName(conda, suffix);
             } else {
                 throw new IllegalStateException("Python version '" + m_pythonVersion
                     + "' is neither Python 2 nor Python " + "3. This is an implementation error.");
@@ -175,14 +176,14 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
                 final Conda conda = new Conda(m_condaDirectoryPath.getStringValue());
                 final CondaEnvironmentIdentifier createdEnvironment;
                 if (pathToEnvFile != null) {
-                    createdEnvironment = conda.createEnvironmentFromFile(m_pythonVersion, pathToEnvFile,
-                        environmentName, m_currentCreationMonitor);
+                    createdEnvironment = PythonCondaUtils.createEnvironmentFromFile(conda, m_pythonVersion,
+                        pathToEnvFile, environmentName, m_currentCreationMonitor);
                 } else {
-                    createdEnvironment =
-                        conda.createDefaultPythonEnvironment(environmentName, pythonVersion, m_currentCreationMonitor);
+                    createdEnvironment = PythonCondaUtils.createDefaultPythonEnvironment(conda, environmentName,
+                        pythonVersion, m_currentCreationMonitor);
                 }
                 onEnvironmentCreationFinished(status, createdEnvironment);
-            } catch (final PythonCanceledExecutionException ex) {
+            } catch (final CondaCanceledExecutionException ex) {
                 onEnvironmentCreationCanceled(status);
             } catch (final Exception ex) {
                 NodeLogger.getLogger(AbstractCondaEnvironmentCreationObserver.class).debug(ex.getMessage(), ex);

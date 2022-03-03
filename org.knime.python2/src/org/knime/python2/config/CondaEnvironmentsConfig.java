@@ -48,6 +48,7 @@
  */
 package org.knime.python2.config;
 
+import org.knime.conda.CondaEnvironmentIdentifier;
 import org.knime.python2.PythonVersion;
 
 /**
@@ -70,7 +71,7 @@ public final class CondaEnvironmentsConfig extends AbstractCondaEnvironmentsConf
         PythonVersion.PYTHON2, //
         CFG_KEY_PYTHON2_CONDA_ENV_DIR, //
         LEGACY_CFG_KEY_PYTHON2_CONDA_ENV_NAME, //
-        PLACEHOLDER_CONDA_ENV, //
+        CondaEnvironmentIdentifier.PLACEHOLDER_CONDA_ENV, //
         getCondaDirectoryPath() //
     );
 
@@ -78,7 +79,7 @@ public final class CondaEnvironmentsConfig extends AbstractCondaEnvironmentsConf
         PythonVersion.PYTHON3, //
         CFG_KEY_PYTHON3_CONDA_ENV_DIR, //
         LEGACY_CFG_KEY_PYTHON3_CONDA_ENV_NAME, //
-        PLACEHOLDER_CONDA_ENV, //
+        CondaEnvironmentIdentifier.PLACEHOLDER_CONDA_ENV, //
         getCondaDirectoryPath() //
     );
 

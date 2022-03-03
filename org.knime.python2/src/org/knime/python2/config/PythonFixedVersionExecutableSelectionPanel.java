@@ -64,6 +64,7 @@ import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeListener;
 
+import org.knime.conda.CondaEnvironmentPropagation.CondaEnvironmentType;
 import org.knime.core.node.FlowVariableModel;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeDialogPane;
@@ -75,7 +76,6 @@ import org.knime.core.node.util.FlowVariableListCellRenderer;
 import org.knime.core.node.util.FlowVariableListCellRenderer.FlowVariableCell;
 import org.knime.core.node.workflow.FlowVariable;
 import org.knime.core.node.workflow.VariableType.StringType;
-import org.knime.python2.CondaEnvironmentPropagation.CondaEnvironmentType;
 import org.knime.python2.PythonCommand;
 import org.knime.python2.PythonVersion;
 
