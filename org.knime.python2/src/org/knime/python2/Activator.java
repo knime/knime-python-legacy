@@ -50,10 +50,13 @@ package org.knime.python2;
 import java.io.File;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.knime.conda.CondaEnvironmentIdentifier;
+import org.knime.conda.nodes.envprop.CondaEnvironmentPropagationNodeFactory;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.util.FileUtil;
 import org.knime.python2.extensions.serializationlibrary.SerializationLibraryExtensions;
@@ -80,6 +83,12 @@ public final class Activator implements BundleActivator {
 
     @Override
     public void start(final BundleContext bundleContext) throws Exception {
+        testPythonInstallation();
+        SourceCodeTemplatesExtensions.init();
+        initCondaEnvPropDefaultEnv();
+    }
+
+    private static void testPythonInstallation() {
         // We need to collect all registered serializers before testing the installation since serializers may specify
         // additional required modules.
         SerializationLibraryExtensions.init();
@@ -99,7 +108,20 @@ public final class Activator implements BundleActivator {
                     requiredSerializerModules, false);
             }
         }).start();
-        SourceCodeTemplatesExtensions.init();
+    }
+
+    private static void initCondaEnvPropDefaultEnv() {
+        CondaEnvironmentPropagationNodeFactory.addDefaultCondaEnvironmentSelector(envs -> {
+            final var pythonVersion = PythonPreferences.getPythonVersionPreference();
+            final String environmentDirectory = pythonVersion == PythonVersion.PYTHON2 //
+                ? PythonPreferences.getPython2CondaEnvironmentDirectoryPath() //
+                : PythonPreferences.getPython3CondaEnvironmentDirectoryPath();
+
+            if (CondaEnvironmentIdentifier.PLACEHOLDER_CONDA_ENV.getDirectoryPath().equals(environmentDirectory)) {
+                return Optional.empty();
+            }
+            return envs.stream().filter(e -> e.getDirectoryPath().equals(environmentDirectory)).findFirst();
+        });
     }
 
     @Override
