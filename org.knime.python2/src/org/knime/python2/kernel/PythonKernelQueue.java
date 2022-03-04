@@ -59,6 +59,7 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
+import org.knime.conda.Conda;
 import org.knime.python2.PythonCommand;
 import org.knime.python2.PythonModuleSpec;
 import org.knime.python2.kernel.PythonKernelBackendRegistry.PythonKernelBackendType;
@@ -81,6 +82,18 @@ import com.google.common.collect.Iterables;
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  */
 public final class PythonKernelQueue {
+
+    static {
+        // If a new environment has been created (either overwriting an existing environment or
+        // "overwriting" a previously non-existent environment), the entries in the kernel queue that
+        // reference the old environment are rendered obsolete and therefore need to be invalidated. The
+        // same is true in case the environment creation failed, which likely leaves the environment in a
+        // corrupt state and also needs to be reflected by the queue.
+        // Unfortunately, clearing only the entries of the queue that reference the old environment is not
+        // straightforwardly done in the queue's current implementation, therefore we need to clear the
+        // entire queue for now.
+        Conda.registerEnvironmentChangeListener(envName -> clear());
+    }
 
     // Class:
 
@@ -262,8 +275,7 @@ public final class PythonKernelQueue {
     private PythonKernel getNextKernelInternal(final PythonCommand command,
         final PythonKernelBackendType kernelBackendType, final Set<PythonModuleSpec> requiredAdditionalModules,
         final Set<PythonModuleSpec> optionalAdditionalModules, final PythonKernelOptions options,
-        final PythonCancelable cancelable)
-        throws PythonCanceledExecutionException, PythonIOException {
+        final PythonCancelable cancelable) throws PythonCanceledExecutionException, PythonIOException {
         final PythonKernelSpec key =
             new PythonKernelSpec(command, kernelBackendType, requiredAdditionalModules, optionalAdditionalModules);
         if (m_pool.getMaxTotal() != 0) {
@@ -278,8 +290,8 @@ public final class PythonKernelQueue {
     }
 
     @SuppressWarnings("resource") // Holder was not taken from pool when this method throws.
-    private PythonKernelOrExceptionHolder dequeueHolder(final PythonKernelSpec key,
-        final PythonCancelable cancelable) throws PythonCanceledExecutionException {
+    private PythonKernelOrExceptionHolder dequeueHolder(final PythonKernelSpec key, final PythonCancelable cancelable)
+        throws PythonCanceledExecutionException {
         PythonKernelOrExceptionHolder holder = null;
         do {
             try {
@@ -336,8 +348,8 @@ public final class PythonKernelQueue {
         return kernel;
     }
 
-    private static PythonKernel createKernelAndConfigure(final PythonKernelSpec key,
-        final PythonKernelOptions options) throws PythonIOException {
+    private static PythonKernel createKernelAndConfigure(final PythonKernelSpec key, final PythonKernelOptions options)
+        throws PythonIOException {
         final PythonKernel kernel = KeyedPooledPythonKernelFactory.createKernel(key);
         try {
             kernel.setOptions(options);
@@ -371,8 +383,7 @@ public final class PythonKernelQueue {
         }
 
         @Override
-        public void passivateObject(final PythonKernelSpec key,
-            final PooledObject<PythonKernelOrExceptionHolder> p) {
+        public void passivateObject(final PythonKernelSpec key, final PooledObject<PythonKernelOrExceptionHolder> p) {
             @SuppressWarnings("resource") // No kernel is held yet or any more.
             final PythonKernelOrExceptionHolder holder = p.getObject();
             if (holder.m_kernel == null && holder.m_exception == null) {
@@ -380,8 +391,7 @@ public final class PythonKernelQueue {
             }
         }
 
-        private static void populateHolder(final PythonKernelSpec key,
-            final PythonKernelOrExceptionHolder holder) {
+        private static void populateHolder(final PythonKernelSpec key, final PythonKernelOrExceptionHolder holder) {
             try {
                 holder.m_kernel = createKernel(key);
             } catch (final PythonIOException ex) {
@@ -439,21 +449,18 @@ public final class PythonKernelQueue {
 
         @SuppressWarnings("resource") // We are literally closing the object here.
         @Override
-        public void destroyObject(final PythonKernelSpec key,
-            final PooledObject<PythonKernelOrExceptionHolder> p) {
+        public void destroyObject(final PythonKernelSpec key, final PooledObject<PythonKernelOrExceptionHolder> p) {
             PythonUtils.Misc.closeSafelyThrowErrors(null, p.getObject());
         }
 
         @Override
-        public boolean validateObject(final PythonKernelSpec key,
-            final PooledObject<PythonKernelOrExceptionHolder> p) {
+        public boolean validateObject(final PythonKernelSpec key, final PooledObject<PythonKernelOrExceptionHolder> p) {
             // Nothing to do.
             return true;
         }
 
         @Override
-        public void activateObject(final PythonKernelSpec key,
-            final PooledObject<PythonKernelOrExceptionHolder> p) {
+        public void activateObject(final PythonKernelSpec key, final PooledObject<PythonKernelOrExceptionHolder> p) {
             // Nothing to do.
         }
     }
