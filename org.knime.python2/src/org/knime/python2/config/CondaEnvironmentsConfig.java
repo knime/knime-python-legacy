@@ -71,16 +71,14 @@ public final class CondaEnvironmentsConfig extends AbstractCondaEnvironmentsConf
         PythonVersion.PYTHON2, //
         CFG_KEY_PYTHON2_CONDA_ENV_DIR, //
         LEGACY_CFG_KEY_PYTHON2_CONDA_ENV_NAME, //
-        CondaEnvironmentIdentifier.PLACEHOLDER_CONDA_ENV, //
-        getCondaDirectoryPath() //
+        CondaEnvironmentIdentifier.PLACEHOLDER_CONDA_ENV //
     );
 
     private final CondaEnvironmentConfig m_python3EnvironmentConfig = new CondaEnvironmentConfig( //
         PythonVersion.PYTHON3, //
         CFG_KEY_PYTHON3_CONDA_ENV_DIR, //
         LEGACY_CFG_KEY_PYTHON3_CONDA_ENV_NAME, //
-        CondaEnvironmentIdentifier.PLACEHOLDER_CONDA_ENV, //
-        getCondaDirectoryPath() //
+        CondaEnvironmentIdentifier.PLACEHOLDER_CONDA_ENV //
     );
 
     @Override
@@ -95,21 +93,18 @@ public final class CondaEnvironmentsConfig extends AbstractCondaEnvironmentsConf
 
     @Override
     public void saveDefaultsTo(final PythonConfigStorage storage) {
-        super.saveDefaultsTo(storage);
         m_python2EnvironmentConfig.saveDefaultsTo(storage);
         m_python3EnvironmentConfig.saveDefaultsTo(storage);
     }
 
     @Override
     public void saveConfigTo(final PythonConfigStorage storage) {
-        super.saveConfigTo(storage);
         m_python2EnvironmentConfig.saveConfigTo(storage);
         m_python3EnvironmentConfig.saveConfigTo(storage);
     }
 
     @Override
     public void loadConfigFrom(final PythonConfigStorage storage) {
-        super.loadConfigFrom(storage);
         m_python2EnvironmentConfig.loadConfigFrom(storage);
         m_python3EnvironmentConfig.loadConfigFrom(storage);
     }

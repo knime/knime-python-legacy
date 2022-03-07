@@ -81,16 +81,14 @@ final class CondaEnvironmentsPreferencePanel
     }
 
     @Override
-    protected void createCondaDirectoryPathWidget(final SettingsModelString condaDirectoryPath,
-        final SettingsModelString installationInfoMessage, final SettingsModelString installationErrorMessage,
-        final Composite panel) {
-        final StatusDisplayingFilePathEditor directoryPathEditor =
-            new StatusDisplayingFilePathEditor(condaDirectoryPath, false, "Conda",
-                "Path to the Conda installation directory", installationInfoMessage, installationErrorMessage, panel);
+    protected void createCondaDirectoryPathStatusWidget(final SettingsModelString installationInfoMessage,
+        final SettingsModelString installationErrorMessage, final Composite panel) {
+        final CondaDirectoryPathStatusPanel statusPanel =
+            new CondaDirectoryPathStatusPanel(installationInfoMessage, installationErrorMessage, panel);
         final GridData gridData = new GridData();
         gridData.grabExcessHorizontalSpace = true;
         gridData.horizontalAlignment = SWT.FILL;
-        directoryPathEditor.setLayoutData(gridData);
+        statusPanel.setLayoutData(gridData);
     }
 
     @Override
@@ -115,7 +113,8 @@ final class CondaEnvironmentsPreferencePanel
             pythonConfig.getPythonInstallationError(), environmentCreator, panel);
         final GridData gridData = new GridData();
         gridData.horizontalAlignment = SWT.FILL;
-        gridData.horizontalIndent = 20;
+        // TODO(benjamin) remove
+//        gridData.horizontalIndent = 20;
         gridData.grabExcessHorizontalSpace = true;
         environmentSelection.setLayoutData(gridData);
         final SettingsModelBoolean isDefaultEnvironment = pythonConfig.getIsDefaultPythonEnvironment();

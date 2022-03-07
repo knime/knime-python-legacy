@@ -82,8 +82,6 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
 
     private final PythonVersion m_pythonVersion;
 
-    private final SettingsModelString m_condaDirectoryPath;
-
     private CondaEnvironmentCreationMonitor m_currentCreationMonitor;
 
     // Not meant for saving/loading. We just want observable values here to communicate with the view:
@@ -96,12 +94,9 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
      * The created instance is {@link #getIsEnvironmentCreationEnabled() disabled by default}.
      *
      * @param environmentPythonVersion The Python version of the Conda environments created by this instance.
-     * @param condaDirectoryPath The Conda directory path. Changes in the model are reflected by this instance.
      */
-    public AbstractCondaEnvironmentCreationObserver(final PythonVersion environmentPythonVersion,
-        final SettingsModelString condaDirectoryPath) {
+    public AbstractCondaEnvironmentCreationObserver(final PythonVersion environmentPythonVersion) {
         m_pythonVersion = environmentPythonVersion;
-        m_condaDirectoryPath = condaDirectoryPath;
     }
 
     /**
@@ -129,7 +124,7 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
      */
     protected String getDefaultEnvironmentName(final String suffix) {
         try {
-            final Conda conda = new Conda(m_condaDirectoryPath.getStringValue());
+            final Conda conda = new Conda();
             final String defaultEnvironmentName;
             if (m_pythonVersion.equals(PythonVersion.PYTHON2)) {
                 defaultEnvironmentName = PythonCondaUtils.getPython2EnvironmentName(conda, suffix);
@@ -173,7 +168,7 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
         new Thread(() -> {
             try {
                 onEnvironmentCreationStarting(status);
-                final Conda conda = new Conda(m_condaDirectoryPath.getStringValue());
+                final Conda conda = new Conda();
                 final CondaEnvironmentIdentifier createdEnvironment;
                 if (pathToEnvFile != null) {
                     createdEnvironment = PythonCondaUtils.createEnvironmentFromFile(conda, m_pythonVersion,

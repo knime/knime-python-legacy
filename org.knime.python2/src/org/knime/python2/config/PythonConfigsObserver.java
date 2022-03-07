@@ -57,6 +57,7 @@ import java.util.Objects;
 
 import org.knime.conda.Conda;
 import org.knime.conda.CondaEnvironmentIdentifier;
+import org.knime.conda.prefs.CondaPreferences;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.python2.PythonCommand;
 import org.knime.python2.PythonKernelTester;
@@ -135,9 +136,6 @@ public final class PythonConfigsObserver extends AbstractPythonConfigsObserver {
             updateDefaultPythonEnvironment();
             testCurrentPreferences();
         });
-
-        // Refresh and test entire Conda config on Conda directory change.
-        condaEnvironmentsConfig.getCondaDirectoryPath().addChangeListener(e -> refreshAndTestCondaConfig());
 
         // Test Conda environments on change:
         condaEnvironmentsConfig.getPython2Config().getEnvironmentDirectory()
@@ -257,7 +255,8 @@ public final class PythonConfigsObserver extends AbstractPythonConfigsObserver {
             condaInfoMessage.setStringValue("Testing Conda installation...");
             condaErrorMessage.setStringValue("");
             onCondaInstallationTestStarting();
-            final Conda conda = new Conda(m_condaEnvironmentsConfig.getCondaDirectoryPath().getStringValue());
+            final String condaDir = CondaPreferences.getCondaInstallationDirectory();
+            final Conda conda = new Conda(condaDir);
             String condaVersionString = conda.getVersionString();
             try {
                 condaVersionString =
@@ -265,7 +264,7 @@ public final class PythonConfigsObserver extends AbstractPythonConfigsObserver {
             } catch (final IllegalArgumentException ex) {
                 // Ignore and use raw version string.
             }
-            condaInfoMessage.setStringValue(condaVersionString);
+            condaInfoMessage.setStringValue("Using Conda at '" + condaDir + "'. " + condaVersionString);
             condaErrorMessage.setStringValue("");
             m_python2EnvironmentCreator.getIsEnvironmentCreationEnabled().setBooleanValue(true);
             m_python3EnvironmentCreator.getIsEnvironmentCreationEnabled().setBooleanValue(true);

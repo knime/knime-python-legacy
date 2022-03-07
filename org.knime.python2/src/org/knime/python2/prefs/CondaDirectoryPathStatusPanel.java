@@ -44,57 +44,62 @@
  * ---------------------------------------------------------------------
  *
  * History
- *   Jul 7, 2021 (marcel): created
+ *   Mar 9, 2022 (benjamin): created
  */
-package org.knime.python2.config;
+package org.knime.python2.prefs;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 /**
- * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
+ * A panel that shows the a label directing to the Conda preference page and the status of the Conda installation.
+ *
+ * @author Benjamin Wilhelm, KNIME GmbH, Konstanz, Germany
  */
-public abstract class AbstractCondaEnvironmentsConfig implements PythonConfig {
-
-    // Not meant for saving/loading. We just want observable values here to communicate with the view:
-
-    private static final String DUMMY_CFG_KEY = "dummy";
-
-    private final SettingsModelString m_condaInstallationInfo = new SettingsModelString(DUMMY_CFG_KEY, "");
-
-    private final SettingsModelString m_condaInstallationError = new SettingsModelString(DUMMY_CFG_KEY, "");
-
-    // TODO deprecate?
-    //    public AbstractCondaEnvironmentsConfig(final String defaultCondaInstallationDirectory) {
-    //        m_condaDirectory = new SettingsModelString(CFG_KEY_CONDA_DIRECTORY_PATH, defaultCondaInstallationDirectory);
-    //    }
+public final class CondaDirectoryPathStatusPanel extends Composite {
 
     /**
-     * @return The installation status message of the local Conda installation. Not meant for saving/loading.
+     * @param infoMessageModel the model storing an information message about the Conda installation
+     * @param errorMessageModel the model storing an error message about the Conda installation
+     * @param parent the parent widget
      */
-    public SettingsModelString getCondaInstallationInfo() {
-        return m_condaInstallationInfo;
-    }
+    public CondaDirectoryPathStatusPanel(final SettingsModelString infoMessageModel,
+        final SettingsModelString errorMessageModel, final Composite parent) {
+        super(parent, SWT.NONE);
+        final GridLayout gridLayout = new GridLayout();
+        gridLayout.marginWidth = 0;
+        gridLayout.marginHeight = 0;
+        gridLayout.verticalSpacing = 0;
+        setLayout(gridLayout);
 
-    /**
-     * @return The installation error message of the local Conda installation. Not meant for saving/loading.
-     */
-    public SettingsModelString getCondaInstallationError() {
-        return m_condaInstallationError;
-    }
+        // Link to Conda preference page
+        final Link condaPrefLink = new Link(parent, SWT.NONE);
+        condaPrefLink.setLayoutData(new GridData());
+        final String message =
+            "Please use the <a href=\"org.knime.conda.CondaPreferencePage\">Conda preference page</a>"
+                + " to configure the path to the Conda installation directory.";
+        condaPrefLink.setText(message);
+        condaPrefLink.addSelectionListener(new SelectionAdapter() {
 
-    // TODO deprecate?
-    //    @Override
-    //    public void saveDefaultsTo(final PythonConfigStorage storage) {
-    //        storage.saveStringModel(m_condaDirectory);
-    //    }
-    //
-    //    @Override
-    //    public void saveConfigTo(final PythonConfigStorage storage) {
-    //        storage.saveStringModel(m_condaDirectory);
-    //    }
-    //
-    //    @Override
-    //    public void loadConfigFrom(final PythonConfigStorage storage) {
-    //        storage.loadStringModel(m_condaDirectory);
-    //    }
+            @Override
+            public void widgetSelected(final SelectionEvent e) {
+                PreferencesUtil.createPreferenceDialogOn(getShell(), e.text, null, null);
+            }
+        });
+
+        // Status
+        final InstallationStatusDisplayPanel statusPanel =
+            new InstallationStatusDisplayPanel(infoMessageModel, errorMessageModel, parent);
+        final GridData gridData = new GridData();
+        gridData.grabExcessHorizontalSpace = true;
+        gridData.horizontalAlignment = SWT.FILL;
+        statusPanel.setLayoutData(gridData);
+    }
 }

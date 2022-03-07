@@ -48,7 +48,6 @@
  */
 package org.knime.python2.config;
 
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.util.Version;
 import org.knime.python2.PythonVersion;
 
@@ -68,11 +67,9 @@ public final class CondaEnvironmentCreationObserver extends AbstractCondaEnviron
      * The created instance is {@link #getIsEnvironmentCreationEnabled() disabled by default}.
      *
      * @param environmentPythonVersion The Python version of the Conda environments created by this instance.
-     * @param condaDirectoryPath The Conda directory path. Changes in the model are reflected by this instance.
      */
-    public CondaEnvironmentCreationObserver(final PythonVersion environmentPythonVersion,
-        final SettingsModelString condaDirectoryPath) {
-        super(environmentPythonVersion, condaDirectoryPath);
+    public CondaEnvironmentCreationObserver(final PythonVersion environmentPythonVersion) {
+        super(environmentPythonVersion);
     }
 
     /**

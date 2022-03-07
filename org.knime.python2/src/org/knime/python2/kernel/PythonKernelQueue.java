@@ -92,7 +92,7 @@ public final class PythonKernelQueue {
         // Unfortunately, clearing only the entries of the queue that reference the old environment is not
         // straightforwardly done in the queue's current implementation, therefore we need to clear the
         // entire queue for now.
-        Conda.registerEnvironmentChangeListener(envName -> clear());
+        Conda.registerEnvironmentChangeListener(event -> clear());
     }
 
     // Class:

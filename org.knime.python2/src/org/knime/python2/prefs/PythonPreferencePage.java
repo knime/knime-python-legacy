@@ -52,6 +52,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -65,6 +66,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.knime.conda.prefs.CondaPreferences;
 import org.knime.core.node.NodeLogger;
 import org.knime.python2.PythonKernelTester.PythonKernelTestResult;
 import org.knime.python2.PythonVersion;
@@ -110,6 +112,12 @@ public final class PythonPreferencePage extends AbstractPythonPreferencePage {
 
     private PythonConfigsObserver m_configObserver;
 
+    private final IPropertyChangeListener m_condaDirPropertyChangeListener = event -> {
+        if ("condaDirectoryPath".equals(event.getProperty()) && m_configObserver != null) {
+            m_configObserver.testCurrentPreferences();
+        }
+    };
+
     /**
      * Constructs the main preference page of the KNIME Python integration.
      */
@@ -149,10 +157,8 @@ public final class PythonPreferencePage extends AbstractPythonPreferencePage {
         m_condaEnvironmentsConfig = new CondaEnvironmentsConfig();
         configs.add(m_condaEnvironmentsConfig);
 
-        m_python2EnvironmentCreator = new CondaEnvironmentCreationObserver(PythonVersion.PYTHON2,
-            m_condaEnvironmentsConfig.getCondaDirectoryPath());
-        m_python3EnvironmentCreator = new CondaEnvironmentCreationObserver(PythonVersion.PYTHON3,
-            m_condaEnvironmentsConfig.getCondaDirectoryPath());
+        m_python2EnvironmentCreator = new CondaEnvironmentCreationObserver(PythonVersion.PYTHON2);
+        m_python3EnvironmentCreator = new CondaEnvironmentCreationObserver(PythonVersion.PYTHON3);
 
         m_condaEnvironmentPanel = new CondaEnvironmentsPreferencePanel(m_condaEnvironmentsConfig,
             m_python2EnvironmentCreator, m_python3EnvironmentCreator, environmentConfigurationPanel);
@@ -245,6 +251,9 @@ public final class PythonPreferencePage extends AbstractPythonPreferencePage {
             }
         });
 
+        // Trigger installation test if the Conda directory path changes
+        CondaPreferences.addPropertyChangeListener(m_condaDirPropertyChangeListener);
+
         // Trigger initial installation test.
         m_configObserver.testCurrentPreferences();
     }
@@ -253,5 +262,11 @@ public final class PythonPreferencePage extends AbstractPythonPreferencePage {
     protected void performApply() {
         super.performApply();
         m_configObserver.testCurrentPreferences();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        CondaPreferences.removePropertyChangeListener(m_condaDirPropertyChangeListener);
     }
 }

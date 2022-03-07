@@ -54,6 +54,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.knime.conda.prefs.CondaPreferences;
 import org.knime.python2.Activator;
 import org.knime.python2.PythonCommand;
 import org.knime.python2.PythonModuleSpec;
@@ -93,7 +94,8 @@ public final class PythonPreferences {
      */
     static final PythonConfigStorage DEFAULT = new PreferenceWrappingConfigStorage(DEFAULT_SCOPE_PREFERENCES);
 
-    private PythonPreferences() {}
+    private PythonPreferences() {
+    }
 
     /**
      * Initializes sensible default Python preferences on the instance scope-level if necessary.
@@ -195,8 +197,7 @@ public final class PythonPreferences {
      * @return the configured path to the conda installation
      */
     public static String getCondaInstallationPath() {
-        final CondaEnvironmentsConfig condaEnvironmentsConfig = loadCurrentCondaEnvironmentsConfig();
-        return condaEnvironmentsConfig.getCondaDirectoryPath().getStringValue();
+        return CondaPreferences.getCondaInstallationDirectory();
     }
 
     public static String getPython2CondaEnvironmentDirectoryPath() {
