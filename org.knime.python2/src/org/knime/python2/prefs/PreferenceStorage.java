@@ -182,7 +182,8 @@ public final class PreferenceStorage {
 
     private <T> T readValue(final String key, final T defaultValue, final Function<String, T> fromString) {
         final Preferences[] readPreferences = getReadPreferences();
-        final String stringValue = Platform.getPreferencesService().get(key, defaultValue.toString(), readPreferences);
+        final String stringValue = Platform.getPreferencesService().get(key,
+            defaultValue == null ? null : defaultValue.toString(), readPreferences);
         return fromString.apply(stringValue);
     }
 }
