@@ -1,4 +1,6 @@
-# Overview
+# ![Image](https://www.knime.com/files/knime_logo_github_40x40_4layers.png) KNIME® - Python Legacy
+
+_See the [knime-python](https://github.com/KNIME/knime-python) for the most recent Python Integration._
 
 This repository contains:
 
@@ -6,12 +8,11 @@ This repository contains:
 * KNIME Python Integration (major version 2) - **deprecated**
 * KNIME Jython Integration
 
-The KNIME Python Integration (major version 2&3) is the current default Python Integration providing nodes to connect to python 2 and python 3 in the "Scripting" category of the node browser. Data transfer is based on a pluggable 
+The KNIME Python Integration (major version 2&3) provides nodes to connect to python 2 and python 3 in the "Scripting" category of the node browser. Data transfer is based on a pluggable
 component using the Eclipse extension point mechanism. Currently, three different (de)serialization modules are available (further explained below) which provide more memory-efficient and processing-time-efficient data transfer.
 The old KNIME Python Integration (major version 2) is deprecated and will no longer be actively developed.
 The "KNIME Jython Integration" includes three Snippet nodes providing capabilities to use Jython in KNIME.
 
-# Details
 
 ## KNIME Python Integration (major versions 2&3)
 
@@ -57,6 +58,7 @@ The node implementations may be found in the project *org.knime.python2.nodes*. 
 
 A detailed explanation of how to set up python with KNIME can be found here: [https://www.knime.com/blog/setting-up-the-knime-python-extension-revisited-for-python-30-and-20](https://www.knime.com/blog/setting-up-the-knime-python-extension-revisited-for-python-30-and-20) 
 
+
 ## KNIME Python Integration (major version 2) - **deprecated**
 
 *NOTE: The KNIME Python Integration (major version 2) is deprecated. Please use the new version (major versions 2&3).*
@@ -76,6 +78,7 @@ The KNIME Python Integration (major version 2) has very much the same structure 
 
 A detailed explanation of how to set up this python integration with KNIME can be found here: [https://www.knime.com/blog/how-to-setup-the-python-extension](https://www.knime.com/blog/how-to-setup-the-python-extension) 
 
+
 ## KNIME Jython Integration
 
 ### Contained Projects
@@ -90,4 +93,13 @@ The following nodes are available in the "KNIME Jython Integration" plugin:
 * **JPython Script 2:1:** run a Jython script processing two KNIME tables and producing a single KNIME output table
 
 All nodes and underlying code are contained in the project *org.knime.ext.jython*.
+
+
+## Development Notes
+
+You can find instructions on how to work with our code or develop extensions for KNIME Analytics Platform in the _knime-sdk-setup_ repository on [BitBucket](https://bitbucket.org/KNIME/knime-sdk-setup) or [GitHub](http://github.com/knime/knime-sdk-setup).
+
+## Join the Community
+
+* [KNIME Forum](https://tech.knime.org/forum/knime-textprocessing)
 
