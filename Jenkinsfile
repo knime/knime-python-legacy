@@ -88,7 +88,8 @@ def runPython27WorkflowTests(String baseBranch){
                     'knime-core-columnar',
                     'knime-core-arrow',
                     'knime-testing-internal',
-                    'knime-xml'
+                    'knime-xml',
+                    'knime-conda'
                 ],
                 ius: [ 'org.knime.features.ext.jython.feature.group', 'org.knime.features.chem.types.feature.group' ]
             ],
@@ -133,7 +134,8 @@ def runPython3MultiversionWorkflowTestConfig(String pythonVersion, String baseBr
                         'knime-core-columnar',
                         'knime-core-arrow',
                         'knime-testing-internal',
-                        'knime-xml'
+                        'knime-xml',
+                        'knime-conda'
                     ],
                     ius: [ 'org.knime.features.chem.types.feature.group' ]
                 ],
