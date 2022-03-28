@@ -257,6 +257,7 @@ public final class PythonConfigsObserver extends AbstractPythonConfigsObserver {
             onCondaInstallationTestStarting();
             final String condaDir = CondaPreferences.getCondaInstallationDirectory();
             final Conda conda = new Conda(condaDir);
+            conda.testInstallation();
             String condaVersionString = conda.getVersionString();
             try {
                 condaVersionString =

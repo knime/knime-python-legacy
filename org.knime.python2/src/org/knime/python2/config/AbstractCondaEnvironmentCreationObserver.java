@@ -125,6 +125,7 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
     protected String getDefaultEnvironmentName(final String suffix) {
         try {
             final Conda conda = new Conda();
+            conda.testInstallation();
             final String defaultEnvironmentName;
             if (m_pythonVersion.equals(PythonVersion.PYTHON2)) {
                 defaultEnvironmentName = PythonCondaUtils.getPython2EnvironmentName(conda, suffix);
@@ -169,6 +170,7 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
             try {
                 onEnvironmentCreationStarting(status);
                 final Conda conda = new Conda();
+                conda.testInstallation();
                 final CondaEnvironmentIdentifier createdEnvironment;
                 if (pathToEnvFile != null) {
                     createdEnvironment = PythonCondaUtils.createEnvironmentFromFile(conda, m_pythonVersion,

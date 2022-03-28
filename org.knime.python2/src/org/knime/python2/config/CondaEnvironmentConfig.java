@@ -170,7 +170,9 @@ public final class CondaEnvironmentConfig extends AbstractPythonEnvironmentConfi
     private boolean tryConvertEnvironmentNameIntoDirectory(final String environmentName,
         final PythonConfigStorage storage) {
         try {
-            final List<CondaEnvironmentIdentifier> environments = new Conda().getEnvironments();
+            final Conda conda = new Conda();
+            conda.testInstallation();
+            final List<CondaEnvironmentIdentifier> environments = conda.getEnvironments();
             for (final CondaEnvironmentIdentifier environment : environments) {
                 if (environmentName.equals(environment.getName())) {
                     m_environmentDirectory.setStringValue(environment.getDirectoryPath());
