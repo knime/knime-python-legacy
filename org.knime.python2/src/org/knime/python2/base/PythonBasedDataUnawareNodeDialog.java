@@ -60,6 +60,7 @@ import org.knime.core.node.port.PortObjectSpec;
 import org.knime.python2.config.PythonCommandConfig;
 import org.knime.python2.config.PythonExecutableSelectionPanel;
 import org.knime.python2.config.PythonFixedVersionExecutableSelectionPanel;
+import org.knime.python2.prefs.PythonPreferences;
 
 /**
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
@@ -73,8 +74,8 @@ public abstract class PythonBasedDataUnawareNodeDialog extends NodeDialogPane {
     }
 
     protected final void addPythonExecutableSelectionTab(final String tabName, final PythonCommandConfig config) {
-        final PythonExecutableSelectionPanel selectionTab =
-            new PythonFixedVersionExecutableSelectionPanel(this, config);
+        final PythonExecutableSelectionPanel selectionTab = new PythonFixedVersionExecutableSelectionPanel(this, config,
+            () -> PythonPreferences.getEnvironmentTypePreference().getName());
         selectionTab.addChangeListener(e -> onPythonCommandChanged(config));
         m_executableSelectionTabs.add(selectionTab);
         addTab(tabName, selectionTab);

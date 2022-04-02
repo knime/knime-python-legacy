@@ -103,7 +103,7 @@ public final class PreferenceStorage {
         m_readContexts = readContexts;
     }
 
-    IEclipsePreferences getWritePreferences() {
+    public IEclipsePreferences getWritePreferences() {
         return m_writeContext.getNode(m_qualifier);
     }
 

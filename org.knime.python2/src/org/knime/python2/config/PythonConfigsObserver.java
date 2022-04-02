@@ -78,7 +78,7 @@ import org.knime.python2.extensions.serializationlibrary.SerializationLibraryExt
  * @author Christian Dietz, KNIME GmbH, Konstanz, Germany
  * @author Benjamin Wilhelm, KNIME GmbH, Konstanz, Germany
  */
-public final class PythonConfigsObserver extends AbstractPythonConfigsObserver {
+public class PythonConfigsObserver extends AbstractPythonConfigsObserver {
 
     private static final String ARROW_SERIALIZER_ID = "org.knime.python2.serde.arrow";
 
@@ -161,23 +161,41 @@ public final class PythonConfigsObserver extends AbstractPythonConfigsObserver {
         serializerConfig.getSerializer().addChangeListener(e -> testCurrentPreferences());
     }
 
+    /**
+     * @return The currently selected PythonEnvironmentType
+     */
+    protected PythonEnvironmentType getEnvironmentType() {
+        return PythonEnvironmentType.fromId(m_environmentTypeConfig.getEnvironmentType().getStringValue());
+    }
+
+    /**
+     * @return The environments of the current type. Can be overloaded to support bundled conda environments.
+     */
+    protected PythonEnvironmentsConfig getEnvironmentsOfCurrentType() {
+        final var environmentType = getEnvironmentType();
+        if (PythonEnvironmentType.CONDA.equals(environmentType)) {
+            return m_condaEnvironmentsConfig;
+        } else if (PythonEnvironmentType.MANUAL.equals(environmentType)) {
+            return m_manualEnvironmentsConfig;
+        } else {
+            throw new IllegalStateException("Selected environment type '" + environmentType.getName()
+                + "' is neither " + "conda nor manual. This is an implementation error.");
+        }
+    }
+
     private void updateDefaultPythonEnvironment() {
+        if (PythonEnvironmentType.BUNDLED.equals(getEnvironmentType())) {
+            // We do not configure a default environment if bundling is selected,
+            // that will happen once the user selects "Conda" or "Manual" for the first time.
+            return;
+        }
+
         final List<PythonEnvironmentConfig> notDefaultEnvironments = new ArrayList<>(4);
         Collections.addAll(notDefaultEnvironments, m_condaEnvironmentsConfig.getPython2Config(),
             m_condaEnvironmentsConfig.getPython3Config(), m_manualEnvironmentsConfig.getPython2Config(),
             m_manualEnvironmentsConfig.getPython3Config());
 
-        final PythonEnvironmentsConfig environmentsOfCurrentType;
-        final PythonEnvironmentType environmentType =
-            PythonEnvironmentType.fromId(m_environmentTypeConfig.getEnvironmentType().getStringValue());
-        if (PythonEnvironmentType.CONDA.equals(environmentType)) {
-            environmentsOfCurrentType = m_condaEnvironmentsConfig;
-        } else if (PythonEnvironmentType.MANUAL.equals(environmentType)) {
-            environmentsOfCurrentType = m_manualEnvironmentsConfig;
-        } else {
-            throw new IllegalStateException("Selected environment type '" + environmentType.getName() + "' is neither "
-                + "conda nor manual. This is an implementation error.");
-        }
+        final PythonEnvironmentsConfig environmentsOfCurrentType = getEnvironmentsOfCurrentType();
         final PythonEnvironmentConfig defaultEnvironment;
         final PythonVersion pythonVersion = PythonVersion.fromId(m_versionConfig.getPythonVersion().getStringValue());
         if (PythonVersion.PYTHON2.equals(pythonVersion)) {
@@ -204,8 +222,7 @@ public final class PythonConfigsObserver extends AbstractPythonConfigsObserver {
      * {@link SerializerConfig}.
      */
     public void testCurrentPreferences() {
-        final PythonEnvironmentType environmentType =
-            PythonEnvironmentType.fromId(m_environmentTypeConfig.getEnvironmentType().getStringValue());
+        final PythonEnvironmentType environmentType = getEnvironmentType();
         if (PythonEnvironmentType.CONDA.equals(environmentType)) {
             refreshAndTestCondaConfig();
         } else if (PythonEnvironmentType.MANUAL.equals(environmentType)) {

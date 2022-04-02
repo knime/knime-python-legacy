@@ -56,6 +56,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
@@ -83,7 +84,7 @@ import org.knime.python2.PythonVersion;
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  */
 @SuppressWarnings("serial") // Not intended for serialization.
-public final class PythonFixedVersionExecutableSelectionPanel extends PythonExecutableSelectionPanel {
+public class PythonFixedVersionExecutableSelectionPanel extends PythonExecutableSelectionPanel {
 
     private static final String UNKNOWN_FLOW_VARIABLE_COMMAND_STRING = "unknown_flow_variable_selected";
 
@@ -93,9 +94,15 @@ public final class PythonFixedVersionExecutableSelectionPanel extends PythonExec
 
     private final FlowVariableModel m_flowVariableModel; // NOSONAR Not intended for serialization.
 
-    private final JRadioButton m_usePreferencesButton;
+    /**
+     * Select this button to use the Python configuration from the preference page. Protected so that derived classes
+     * can update the label.
+     */
+    protected final JRadioButton m_usePreferencesButton;
 
     private final JRadioButton m_useVariableButton;
+
+    private final Supplier<String> m_pythonEnvironmentTypeNameSupplier;
 
     // Sonar: Not intended for serialization.
     private final PythonEnvironmentVariableSelectionBox m_variableSelectionBox; // NOSONAR
@@ -104,8 +111,11 @@ public final class PythonFixedVersionExecutableSelectionPanel extends PythonExec
      * @param dialog The hosting node dialog. Needed to create flow variable models for the Python-command config
      *            exposed to the user by this instance.
      * @param config The configuration exposed to the user, and accordingly manipulated, by this instance.
+     * @param pythonEnvironmentTypeNameSupplier A supplier for the currently selected Python environment type name
+     *            (Bundled, Conda or Manual)
      */
-    public PythonFixedVersionExecutableSelectionPanel(final NodeDialogPane dialog, final PythonCommandConfig config) {
+    public PythonFixedVersionExecutableSelectionPanel(final NodeDialogPane dialog, final PythonCommandConfig config,
+        final Supplier<String> pythonEnvironmentTypeNameSupplier) {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory
             .createTitledBorder("Conda environment propagation (" + config.getPythonVersion().getName() + ")"));
@@ -113,6 +123,7 @@ public final class PythonFixedVersionExecutableSelectionPanel extends PythonExec
         m_dialog = dialog;
         m_config = config;
         m_flowVariableModel = dialog.createFlowVariableModel(m_config.getConfigKey(), StringType.INSTANCE);
+        m_pythonEnvironmentTypeNameSupplier = pythonEnvironmentTypeNameSupplier;
 
         final GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -138,6 +149,17 @@ public final class PythonFixedVersionExecutableSelectionPanel extends PythonExec
         m_usePreferencesButton.addActionListener(e -> updateModel(null));
         m_useVariableButton.addActionListener(e -> updateModel(m_variableSelectionBox.getSelectedVariableName()));
         m_flowVariableModel.addChangeListener(e -> updateConfigAndView());
+    }
+
+    /**
+     * Backwards compatible constructor that does not set a name
+     *
+     * @param dialog The hosting node dialog. Needed to create flow variable models for the Python-command config
+     *            exposed to the user by this instance.
+     * @param config The configuration exposed to the user, and accordingly manipulated, by this instance.
+     */
+    public PythonFixedVersionExecutableSelectionPanel(final NodeDialogPane dialog, final PythonCommandConfig config) {
+        this(dialog, config, () -> null);
     }
 
     @Override
@@ -197,11 +219,11 @@ public final class PythonFixedVersionExecutableSelectionPanel extends PythonExec
                 commandString = variableValue.map(v -> v.getValue(StringType.INSTANCE)).orElse(null);
             } else {
                 // State 4
-                NodeLogger.getLogger(PythonFixedVersionExecutableSelectionPanel.class).warn("The variable \"" +
-                    m_flowVariableModel.getInputVariableName() +
-                    "\" that controls the Python executable of this node does not exist (anymore).\n" +
-                    "Please select a different Python executable via the respective tab of the configuration dialog " +
-                    "of this node.");
+                NodeLogger.getLogger(PythonFixedVersionExecutableSelectionPanel.class).warn("The variable \""
+                    + m_flowVariableModel.getInputVariableName()
+                    + "\" that controls the Python executable of this node does not exist (anymore).\n"
+                    + "Please select a different Python executable via the respective tab of the configuration dialog "
+                    + "of this node.");
                 commandString = UNKNOWN_FLOW_VARIABLE_COMMAND_STRING;
             }
         }
@@ -265,6 +287,20 @@ public final class PythonFixedVersionExecutableSelectionPanel extends PythonExec
         m_variableSelectionBox.updateSelection(
             m_dialog.getAvailableFlowVariables(CondaEnvironmentType.INSTANCE, StringType.INSTANCE),
             m_flowVariableModel);
+        updatePreferencesLabel();
+    }
+
+    /**
+     * Update the label to mention the environment type name in case one is given. If it is null, we don't update the
+     * label. This can happen due to the backward-compatibility-constructor and means we never change the label at all.
+     */
+    private void updatePreferencesLabel() {
+        final var environmentTypeName = m_pythonEnvironmentTypeNameSupplier.get();
+
+        if (environmentTypeName != null) {
+            m_usePreferencesButton
+                .setText("Use KNIME Preferences: " + environmentTypeName + " (ignore Conda flow variables)");
+        }
     }
 
     @Override
@@ -281,8 +317,8 @@ public final class PythonFixedVersionExecutableSelectionPanel extends PythonExec
         public PythonEnvironmentVariableSelectionBox(final FlowVariableModel model) {
             m_selectionBox.setRenderer(new FlowVariableListCellRenderer());
             m_selectionBox.addItemListener(e -> {
-                if (m_selectionBox.isEnabled() && !m_isSelectionBoxUpdating &&
-                    e.getStateChange() == ItemEvent.SELECTED) {
+                if (m_selectionBox.isEnabled() && !m_isSelectionBoxUpdating
+                    && e.getStateChange() == ItemEvent.SELECTED) {
                     model.setInputVariableName(getSelectedVariableName());
                 }
             });

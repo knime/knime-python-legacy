@@ -64,7 +64,7 @@ import org.knime.python2.config.CondaEnvironmentsConfig;
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  * @author Christian Dietz, KNIME GmbH, Konstanz, Germany
  */
-final class CondaEnvironmentsPreferencePanel
+public final class CondaEnvironmentsPreferencePanel
     extends AbstractCondaEnvironmentsPanel<CondaEnvironmentCreationPreferenceDialog, Composite> {
 
     public CondaEnvironmentsPreferencePanel(final CondaEnvironmentsConfig config,
@@ -94,7 +94,9 @@ final class CondaEnvironmentsPreferencePanel
     @Override
     protected void createPython2EnvironmentWidget(final CondaEnvironmentConfig python2Config,
         final CondaEnvironmentCreationObserver python2EnvironmentCreator, final Composite panel) {
-        createPythonEnvironmentWidget(PythonVersion.PYTHON2, python2Config, python2EnvironmentCreator, panel);
+        if (python2EnvironmentCreator != null) {
+            createPythonEnvironmentWidget(PythonVersion.PYTHON2, python2Config, python2EnvironmentCreator, panel);
+        }
     }
 
     @Override

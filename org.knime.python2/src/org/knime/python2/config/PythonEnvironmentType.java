@@ -61,7 +61,12 @@ public enum PythonEnvironmentType {
         /**
          * Manual environment configuration.
          */
-        MANUAL("manual", "Manual");
+        MANUAL("manual", "Manual"),
+        /**
+         * Bundled conda environment. Only available for org.knime.python3.
+         * @since 4.6
+         */
+        BUNDLED("bundled", "Bundled");
 
     /**
      * @param environmentTypeId The {@link #getId() id} of the {@link PythonEnvironmentType} to return.
@@ -73,9 +78,11 @@ public enum PythonEnvironmentType {
             type = CONDA;
         } else if (MANUAL.getId().equals(environmentTypeId)) {
             type = MANUAL;
+        } else if (BUNDLED.getId().equals(environmentTypeId)) {
+            type = BUNDLED;
         } else {
             throw new IllegalStateException("Python environment type '" + environmentTypeId
-                + "' is neither conde nor manual. This is an implementation error.");
+                + "' is neither bundled, conda nor manual. This is an implementation error.");
         }
         return type;
     }
@@ -90,9 +97,11 @@ public enum PythonEnvironmentType {
             type = CONDA;
         } else if (MANUAL.getName().equals(environmentTypeName)) {
             type = MANUAL;
+        } else if (BUNDLED.getName().equals(environmentTypeName)) {
+            type = BUNDLED;
         } else {
             throw new IllegalStateException("Python environment type '" + environmentTypeName
-                + "' is neither conde nor manual. This is an implementation error.");
+                + "' is neither bundled, conda nor manual. This is an implementation error.");
         }
         return type;
     }

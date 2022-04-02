@@ -62,10 +62,16 @@ import org.knime.python2.config.ManualEnvironmentsConfig;
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  * @author Christian Dietz, KNIME GmbH, Konstanz, Germany
  */
-final class ManualEnvironmentsPreferencePanel extends AbstractManualEnvironmentsPanel<Composite> {
+public final class ManualEnvironmentsPreferencePanel extends AbstractManualEnvironmentsPanel<Composite> {
+    private final boolean m_allowPython2;
+
+    public ManualEnvironmentsPreferencePanel(final ManualEnvironmentsConfig config, final Composite parent, final boolean allowPython2) {
+        super(config, parent);
+        m_allowPython2 = allowPython2;
+    }
 
     public ManualEnvironmentsPreferencePanel(final ManualEnvironmentsConfig config, final Composite parent) {
-        super(config, parent);
+        this(config, parent, true);
     }
 
     @Override
@@ -77,7 +83,9 @@ final class ManualEnvironmentsPreferencePanel extends AbstractManualEnvironments
 
     @Override
     protected void createPython2PathWidget(final ManualEnvironmentConfig python2Config, final Composite panel) {
-        createPythonPathWidget(PythonVersion.PYTHON2, python2Config, panel);
+        if (m_allowPython2) {
+            createPythonPathWidget(PythonVersion.PYTHON2, python2Config, panel);
+        }
     }
 
     @Override

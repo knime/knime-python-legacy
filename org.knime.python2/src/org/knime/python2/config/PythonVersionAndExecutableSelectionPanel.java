@@ -65,6 +65,7 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.python2.PythonCommand;
 import org.knime.python2.PythonVersion;
+import org.knime.python2.prefs.PythonPreferences;
 
 /**
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
@@ -109,11 +110,11 @@ public final class PythonVersionAndExecutableSelectionPanel extends PythonExecut
         add(m_pythonVersionSelectionPanel, gbc);
 
         m_pythonEnvironmentSelectionsWrapper = new JPanel(new CardLayout());
-        m_python2ExecutableSelectionPanel =
-            new PythonFixedVersionExecutableSelectionPanel(dialog, m_config.getPython2CommandConfig());
+        m_python2ExecutableSelectionPanel = new PythonFixedVersionExecutableSelectionPanel(dialog,
+            m_config.getPython2CommandConfig(), () -> PythonPreferences.getEnvironmentTypePreference().getName());
         m_pythonEnvironmentSelectionsWrapper.add(m_python2ExecutableSelectionPanel, PythonVersion.PYTHON2.getId());
-        m_python3ExecutableSelectionPanel =
-            new PythonFixedVersionExecutableSelectionPanel(dialog, m_config.getPython3CommandConfig());
+        m_python3ExecutableSelectionPanel = new PythonFixedVersionExecutableSelectionPanel(dialog,
+            m_config.getPython3CommandConfig(), () -> PythonPreferences.getEnvironmentTypePreference().getName());
         m_pythonEnvironmentSelectionsWrapper.add(m_python3ExecutableSelectionPanel, PythonVersion.PYTHON3.getId());
         updateShownSelectionPanel();
         gbc.gridy++;
