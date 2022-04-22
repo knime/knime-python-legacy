@@ -66,6 +66,18 @@ public final class PythonEnvironmentTypeConfig implements PythonConfig {
      */
     public static final String DEFAULT_ENVIRONMENT_TYPE = PythonEnvironmentType.CONDA.getId();
 
+    /** Default constructor */
+    public PythonEnvironmentTypeConfig() {
+    }
+
+    /**
+     * Construct an environment type config with an initial value
+     * @param envType The initial env type to set
+     */
+    public PythonEnvironmentTypeConfig(final PythonEnvironmentType envType) {
+        m_environmentType.setStringValue(envType.getId());
+    }
+
     private final SettingsModelString m_environmentType =
         new SettingsModelString(CFG_KEY_ENVIRONMENT_TYPE, DEFAULT_ENVIRONMENT_TYPE);
 

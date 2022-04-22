@@ -152,18 +152,33 @@ public final class PythonPreferences {
         return getPythonCommandPreference(PythonVersion.PYTHON3);
     }
 
-    private static PythonCommand getPythonCommandPreference(final PythonVersion pythonVersion) {
-        final PythonEnvironmentType currentEnvironmentType = getEnvironmentTypePreference();
+
+
+    /**
+     * Retrieve the Python environments configuration for the given environment type
+     *
+     * Used e.g. to initialize the preference page for Python (Labs).
+     * @param environmentType
+     *
+     * @since 4.6
+     * @return The currently selected default Python 3 environments configuration.
+     */
+    public static PythonEnvironmentsConfig getPythonEnvironmentsConfig(final PythonEnvironmentType environmentType) {
         PythonEnvironmentsConfig environmentsConfig;
-        if (PythonEnvironmentType.CONDA.equals(currentEnvironmentType)) {
+        if (PythonEnvironmentType.CONDA.equals(environmentType)) {
             environmentsConfig = new CondaEnvironmentsConfig();
-        } else if (PythonEnvironmentType.MANUAL.equals(currentEnvironmentType)) {
+        } else if (PythonEnvironmentType.MANUAL.equals(environmentType)) {
             environmentsConfig = new ManualEnvironmentsConfig();
         } else {
             throw new IllegalStateException(
                 "Selected Python environment type is neither Conda nor manual. This is an implementation error.");
         }
         environmentsConfig.loadConfigFrom(CURRENT);
+        return environmentsConfig;
+    }
+
+    private static PythonEnvironmentConfig getPythonEnvironmentConfig(final PythonVersion pythonVersion) {
+        PythonEnvironmentsConfig environmentsConfig = getPythonEnvironmentsConfig(getEnvironmentTypePreference());
         PythonEnvironmentConfig environmentConfig;
         if (PythonVersion.PYTHON2.equals(pythonVersion)) {
             environmentConfig = environmentsConfig.getPython2Config();
@@ -173,7 +188,11 @@ public final class PythonPreferences {
             throw new IllegalStateException("Selected default Python version is neither Python 2 nor Python 3. "
                 + "This is an implementation error.");
         }
-        return environmentConfig.getPythonCommand();
+        return environmentConfig;
+    }
+
+    private static PythonCommand getPythonCommandPreference(final PythonVersion pythonVersion) {
+        return getPythonEnvironmentConfig(pythonVersion).getPythonCommand();
     }
 
     /**

@@ -101,7 +101,7 @@ public enum PythonEnvironmentType {
             type = BUNDLED;
         } else {
             throw new IllegalStateException("Python environment type '" + environmentTypeName
-                + "' is neither bundled, conda nor manual. This is an implementation error.");
+                + "' is neither Bundled, Conda nor Manual. This is an implementation error.");
         }
         return type;
     }
