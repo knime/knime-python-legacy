@@ -92,6 +92,7 @@ import org.knime.core.node.workflow.CredentialsProvider;
 import org.knime.core.node.workflow.FlowVariable;
 import org.knime.core.node.workflow.NodeContext;
 import org.knime.core.util.Pair;
+import org.knime.core.util.asynclose.AsynchronousCloseable;
 import org.knime.core.util.pathresolve.ResolverUtil;
 import org.knime.python.typeextension.KnimeToPythonExtension;
 import org.knime.python.typeextension.KnimeToPythonExtensions;
@@ -305,6 +306,9 @@ public final class Python2KernelBackend implements PythonKernelBackend {
     private final NodeContextManager m_nodeContextManager = new NodeContextManager();
 
     private final AtomicBoolean m_closed = new AtomicBoolean(false);
+
+    private final AsynchronousCloseable<PythonKernelCleanupException> m_closer =
+        AsynchronousCloseable.createAsynchronousCloser(this::asynchronousCloseInternal);
 
     /**
      * Creates a new Python kernel back end by starting a Python process and connecting to it.
@@ -1294,58 +1298,79 @@ public final class Python2KernelBackend implements PythonKernelBackend {
 
     @Override
     public void close() throws PythonKernelCleanupException {
+        var exception = synchronousClose();
+        m_closer.close();
+        if (exception != null) {
+            throw exception;
+        }
+    }
+
+    @Override
+    public Future<Void> asynchronousClose() throws PythonKernelCleanupException {
+        var exception = synchronousClose();
+        var future = m_closer.asynchronousClose();
+        if (exception == null) {
+            return future;
+        } else {
+            throw exception;
+        }
+
+    }
+
+    /**
+     * The part of close that has to happen synchronously.
+     */
+    private PythonKernelCleanupException synchronousClose() {
         if (m_closed.compareAndSet(false, true)) {
             // Closing the database connections must be done synchronously. Otherwise Python database testflows fail
             // because the test framework's database janitors try to clean up the databases before the connections are
             // closed. Exceptions that occur during cleanup should be propagated to the user since external resources
             // (e.g., databases) could be affected.
-            PythonKernelCleanupException cleanupException = null;
             try {
                 if (m_commands != null) {
                     m_commands.cleanUp().get(getCleanupTimeoutInMillis(), TimeUnit.MILLISECONDS);
                 }
+                return null;
             } catch (TimeoutException ex) {
-                cleanupException = new PythonKernelCleanupException("An attempt to clean up Python timed out. "
+                return new PythonKernelCleanupException("An attempt to clean up Python timed out. "
                     + "Please consider increasing the cleanup timeout using the VM option '-D" + CLEANUP_TIMEOUT_VM_OPT
                     + "=<value-in-ms>'.", ex);
             } catch (Throwable t) {
                 t = PythonUtils.Misc.unwrapExecutionException(t).orElse(t);
-                cleanupException =
-                    new PythonKernelCleanupException("Failed to clean up Python. See log for details.", t);
+                return new PythonKernelCleanupException("Failed to clean up Python. See log for details.", t);
             }
+        } else {
+            return null;
+        }
+    }
 
-            // Async. closing.
-            new Thread(() -> {
-                PythonUtils.Misc.closeSafely(LOGGER::debug, m_outputListeners);
-                PythonUtils.Misc.invokeSafely(LOGGER::debug, ExecutorService::shutdownNow, m_executorService);
-                PythonUtils.Misc.closeSafely(LOGGER::debug, m_commands, m_serverSocket, m_socket, m_serializer);
-                // If the original process was a script, we have to kill the actual Python process by PID.
-                if (m_pid != null) {
-                    try {
-                        ProcessBuilder pb;
-                        if (System.getProperty("os.name").toLowerCase().contains("win")) {
-                            pb = new ProcessBuilder("taskkill", "/F", "/PID", "" + m_pid);
-                        } else {
-                            pb = new ProcessBuilder("kill", "-KILL", "" + m_pid);
-                        }
-                        final Process p = pb.start();
-                        p.waitFor();
-                    } catch (final InterruptedException ex) {
-                        // Closing the kernel should not be interrupted.
-                        Thread.currentThread().interrupt();
-                    } catch (final Exception ignore) {
-                        // Ignore.
-                    }
+    /**
+     * The part of close that can be done asynchronously.
+     */
+    private void asynchronousCloseInternal() throws PythonKernelCleanupException {
+        PythonUtils.Misc.closeSafely(LOGGER::debug, m_outputListeners);
+        PythonUtils.Misc.invokeSafely(LOGGER::debug, ExecutorService::shutdownNow, m_executorService);
+        PythonUtils.Misc.closeSafely(LOGGER::debug, m_commands, m_serverSocket, m_socket, m_serializer);
+        // If the original process was a script, we have to kill the actual Python process by PID.
+        if (m_pid != null) {
+            try {
+                ProcessBuilder pb;
+                if (System.getProperty("os.name").toLowerCase().contains("win")) {
+                    pb = new ProcessBuilder("taskkill", "/F", "/PID", "" + m_pid);
+                } else {
+                    pb = new ProcessBuilder("kill", "-KILL", "" + m_pid);
                 }
-                if (m_process != null) {
-                    m_process.destroy();
-                }
-            }).start();
-
-            // (Re-)Throw exception after the rest of the kernel shutdown was initiated.
-            if (cleanupException != null) {
-                throw cleanupException;
+                final Process p = pb.start();
+                p.waitFor();
+            } catch (final InterruptedException ex) {
+                // Closing the kernel should not be interrupted.
+                Thread.currentThread().interrupt();
+            } catch (final Exception ignore) {
+                // Ignore.
             }
+        }
+        if (m_process != null) {
+            m_process.destroy();
         }
     }
 

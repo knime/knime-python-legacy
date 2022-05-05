@@ -58,6 +58,7 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.workflow.FlowVariable;
+import org.knime.core.util.asynclose.AsynchronousCloseable;
 import org.knime.python2.PythonCommand;
 import org.knime.python2.generic.ImageContainer;
 import org.knime.python2.port.PickledObject;
@@ -66,7 +67,7 @@ import org.knime.python2.port.PickledObjectFile;
 /**
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  */
-public interface PythonKernelBackend extends AutoCloseable {
+public interface PythonKernelBackend extends AsynchronousCloseable<PythonKernelCleanupException> {
 
     /**
      * @return The {@link PythonCommand} that was used to construct this instance.

@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
@@ -59,6 +60,7 @@ import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.workflow.FlowVariable;
+import org.knime.core.util.asynclose.AsynchronousCloseable;
 import org.knime.python2.PythonCommand;
 import org.knime.python2.PythonKernelTester;
 import org.knime.python2.PythonKernelTester.PythonKernelTestResult;
@@ -77,7 +79,7 @@ import org.knime.python2.port.PickledObjectFile;
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  * @author Christian Dietz, KNIME GmbH, Konstanz, Germany
  */
-public class PythonKernel implements AutoCloseable {
+public class PythonKernel implements AsynchronousCloseable<PythonKernelCleanupException> {
 
     private static final NodeLogger LOGGER = NodeLogger.getLogger(PythonKernel.class);
 
@@ -540,6 +542,11 @@ public class PythonKernel implements AutoCloseable {
     @Override
     public void close() throws PythonKernelCleanupException {
         m_backend.close();
+    }
+
+    @Override
+    public Future<Void> asynchronousClose() throws PythonKernelCleanupException {
+        return m_backend.asynchronousClose();
     }
 
     /**
