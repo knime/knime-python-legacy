@@ -101,6 +101,7 @@ class PythonLearnerNodeModel extends PythonNodeModel<PythonLearnerNodeConfig> {
                 PickledObject.getObject(PythonLearnerNodeConfig.getVariableNames().getOutputObjects()[0], kernel, exec);
             exec.createSubProgress(0.1).setProgress(1);
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new PortObject[]{new PickledObjectPortObject(object)};
     }

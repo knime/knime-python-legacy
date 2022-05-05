@@ -103,6 +103,7 @@ class PythonPredictorNodeModel extends PythonNodeModel<PythonPredictorNodeConfig
             table = kernel.getDataTable(PythonPredictorNodeConfig.getVariableNames().getOutputTables()[0], exec,
                 exec.createSubProgress(0.3));
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new BufferedDataTable[]{table};
     }

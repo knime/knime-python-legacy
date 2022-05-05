@@ -53,12 +53,14 @@ import java.util.Set;
 
 import org.knime.base.node.util.exttool.ExtToolOutputNodeModel;
 import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.port.PortType;
 import org.knime.core.node.workflow.FlowVariable;
 import org.knime.core.node.workflow.VariableType;
 import org.knime.core.node.workflow.VariableTypeRegistry;
+import org.knime.core.util.asynclose.AsynchronousCloseableTracker;
 import org.knime.python2.PythonCommand;
 import org.knime.python2.PythonModuleSpec;
 import org.knime.python2.PythonVersion;
@@ -70,6 +72,7 @@ import org.knime.python2.kernel.PythonCancelable;
 import org.knime.python2.kernel.PythonCanceledExecutionException;
 import org.knime.python2.kernel.PythonIOException;
 import org.knime.python2.kernel.PythonKernel;
+import org.knime.python2.kernel.PythonKernelCleanupException;
 import org.knime.python2.kernel.PythonKernelOptions;
 import org.knime.python2.kernel.PythonKernelQueue;
 import org.knime.python2.prefs.PythonPreferences;
@@ -83,11 +86,16 @@ import org.knime.python2.prefs.PythonPreferences;
  */
 public abstract class PythonNodeModel<C extends PythonSourceCodeConfig> extends ExtToolOutputNodeModel {
 
+    private static final NodeLogger LOGGER = NodeLogger.getLogger(PythonNodeModel.class);
+
     private C m_scriptConfig = createConfig();
 
     private final PythonVersionAndCommandConfig m_executableConfig = new PythonVersionAndCommandConfig(
         PythonPreferences.getPythonVersionPreference(), PythonPreferences::getCondaInstallationPath,
         PythonPreferences::getPython2CommandPreference, PythonPreferences::getPython3CommandPreference);
+
+    private final AsynchronousCloseableTracker<PythonKernelCleanupException> m_kernelShutdownTracker =
+        new AsynchronousCloseableTracker<>(t -> LOGGER.debug("Kernel shutdown failed.", t));
 
     /**
      * Constructor.
@@ -155,6 +163,21 @@ public abstract class PythonNodeModel<C extends PythonSourceCodeConfig> extends 
             : options.getPython2Command();
         return PythonKernelQueue.getNextKernel(command, requiredAdditionalModules, optionalAdditionalModules, options,
             cancelable);
+    }
+
+    /**
+     * Shuts down the provided kernel, whereas part of the shutdown may happen asynchronously for performance reasons.
+     *
+     * @param kernel to shutdown
+     * @throws PythonKernelCleanupException if the synchronous part of the shutdown fails
+     */
+    protected final void shutdownKernel(final PythonKernel kernel) throws PythonKernelCleanupException {
+        m_kernelShutdownTracker.closeAsynchronously(kernel);
+    }
+
+    @Override
+    protected void onDispose() {
+        m_kernelShutdownTracker.waitForAllToClose();
     }
 
     /**

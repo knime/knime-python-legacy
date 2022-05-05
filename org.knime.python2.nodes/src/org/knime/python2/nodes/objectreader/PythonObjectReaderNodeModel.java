@@ -115,6 +115,7 @@ class PythonObjectReaderNodeModel extends PythonNodeModel<PythonObjectReaderNode
                 kernel, exec);
             exec.createSubProgress(0.1).setProgress(1);
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new PortObject[]{new PickledObjectPortObject(object)};
     }

@@ -96,6 +96,7 @@ class PythonObjectWriterNodeModel extends PythonNodeModel<PythonObjectWriterNode
                     kernel.getFlowVariables(PythonObjectWriterNodeConfig.getVariableNames().getFlowVariables());
             exec.createSubProgress(0.9).setProgress(1);
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new PortObject[0];
     }

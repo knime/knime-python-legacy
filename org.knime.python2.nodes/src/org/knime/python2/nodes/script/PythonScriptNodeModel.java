@@ -92,6 +92,7 @@ final class PythonScriptNodeModel extends PythonNodeModel<PythonScriptNodeConfig
             table = kernel.getDataTable(PythonScriptNodeConfig.getVariableNames().getOutputTables()[0], exec,
                 exec.createSubProgress(0.3));
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new BufferedDataTable[]{table};
     }

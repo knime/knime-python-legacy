@@ -117,6 +117,7 @@ class PythonViewNodeModel extends PythonNodeModel<PythonViewNodeConfig> {
             exec.createSubProgress(0.1).setProgress(1);
             addNewVariables(variables);
             m_image = image.getBufferedImage();
+            shutdownKernel(kernel);
         }
         if(m_image != null) {
             if (image.hasSvgDocument()) {

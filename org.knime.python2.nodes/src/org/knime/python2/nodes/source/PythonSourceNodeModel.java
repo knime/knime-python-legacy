@@ -96,6 +96,7 @@ class PythonSourceNodeModel extends PythonNodeModel<PythonSourceNodeConfig> {
             table = kernel.getDataTable(PythonSourceNodeConfig.getVariableNames().getOutputTables()[0], exec,
                 exec.createSubProgress(0.3));
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new BufferedDataTable[]{table};
     }

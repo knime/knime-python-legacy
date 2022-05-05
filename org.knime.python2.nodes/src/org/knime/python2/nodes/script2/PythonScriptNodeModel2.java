@@ -158,6 +158,7 @@ final class PythonScriptNodeModel2 extends PythonNodeModel<PythonScriptNodeConfi
                     : outExec;
                 outObjects[i] = outPort.execute(kernel, outPortExec);
             }
+            shutdownKernel(kernel);
             return outObjects;
         }
     }

@@ -97,6 +97,7 @@ class PythonVariablesNodeModel extends PythonNodeModel<PythonVariablesNodeConfig
                 kernel.getFlowVariables(PythonVariablesNodeConfig.getVariableNames().getFlowVariables());
             exec.createSubProgress(0.1).setProgress(1);
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new PortObject[]{FlowVariablePortObject.INSTANCE};
     }

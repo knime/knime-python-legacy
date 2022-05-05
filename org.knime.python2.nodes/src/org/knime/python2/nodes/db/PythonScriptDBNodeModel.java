@@ -119,6 +119,7 @@ class PythonScriptDBNodeModel extends PythonNodeModel<PythonScriptDBNodeConfig> 
             DatabaseUtility du = new DatabaseUtility(null, null, (DBAggregationFunctionFactory[])null);
             final DBReader reader = du.getReader(connOut);
             final DataTableSpec resultSpec = reader.getDataTableSpec(cp);
+            shutdownKernel(kernel);
             return new PortObject[]{new DatabasePortObject(new DatabasePortObjectSpec(resultSpec, connOut))};
         } catch (PythonKernelCleanupException ex) {
             throw new PythonKernelCleanupException(ex.getMessage() + "\nDatabase connections that were opened during "

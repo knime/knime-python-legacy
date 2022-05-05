@@ -95,6 +95,7 @@ class PythonLearnerNodeModel2 extends PythonNodeModel<PythonLearnerNodeConfig2> 
             portObject = m_pickledObjectPort.execute(kernel, exec);
             exec.createSubProgress(0.1).setProgress(1);
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new PortObject[]{portObject};
     }

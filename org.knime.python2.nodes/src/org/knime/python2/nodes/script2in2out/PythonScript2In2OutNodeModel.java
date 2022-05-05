@@ -98,6 +98,7 @@ final class PythonScript2In2OutNodeModel extends PythonNodeModel<PythonScript2In
             table2 = kernel.getDataTable(PythonScript2In2OutNodeConfig.getVariableNames().getOutputTables()[1], exec,
                 exec.createSubProgress(0.15));
             addNewVariables(variables);
+            shutdownKernel(kernel);
         }
         return new BufferedDataTable[]{table1, table2};
     }
