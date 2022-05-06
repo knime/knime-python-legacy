@@ -398,9 +398,7 @@ public class PythonConfigsObserver extends AbstractPythonConfigsObserver {
                 + pythonVersion.getName() + "." + environmentCreationInfo);
             return;
         }
-        final Collection<PythonModuleSpec> requiredSerializerModules = SerializationLibraryExtensions
-            .getSerializationLibraryFactory(m_serializerConfig.getSerializer().getStringValue())
-            .getRequiredExternalModules();
+        final Collection<PythonModuleSpec> requiredSerializerModules = getAdditionalRequiredModules();
         infoMessage.setStringValue("Testing " + pythonVersion.getName() + " environment...");
         errorMessage.setStringValue("");
         new Thread(() -> {
@@ -417,6 +415,18 @@ public class PythonConfigsObserver extends AbstractPythonConfigsObserver {
             errorMessage.setStringValue(errorLog);
             onEnvironmentInstallationTestFinished(environmentType, pythonVersion, testResult);
         }).start();
+    }
+
+    /**
+     * Provides any additional modules that are required for the environment to be valid.
+     * By default these are the requirements of the selected serialization library.
+     *
+     * @return any additional modules that have to be present
+     */
+    protected Collection<PythonModuleSpec> getAdditionalRequiredModules() {
+        return SerializationLibraryExtensions
+        .getSerializationLibraryFactory(m_serializerConfig.getSerializer().getStringValue())
+        .getRequiredExternalModules();
     }
 
     private boolean isPlaceholderEnvironmentSelected(final boolean isPython3) {
