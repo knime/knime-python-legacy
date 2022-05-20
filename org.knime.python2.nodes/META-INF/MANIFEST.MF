@@ -18,4 +18,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.knime.python2.nodes,
  org.knime.python2.ports
 Automatic-Module-Name: org.knime.python2.nodes
-Import-Package: org.w3c.dom.events;version="3.0.0"
+

@@ -50,4 +50,4 @@ Bundle-ActivationPolicy: lazy
 Eclipse-ExtensibleAPI: true
 Eclipse-BundleShape: dir
 Automatic-Module-Name: org.knime.python2
-Import-Package: org.w3c.dom.events;version="3.0.0"
+
