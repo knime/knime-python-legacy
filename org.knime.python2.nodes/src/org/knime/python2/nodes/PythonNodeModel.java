@@ -180,6 +180,12 @@ public abstract class PythonNodeModel<C extends PythonSourceCodeConfig> extends 
         m_kernelShutdownTracker.waitForAllToClose();
     }
 
+    @Override
+    protected void reset() {
+        super.reset();
+        m_kernelShutdownTracker.waitForAllToClose();
+    }
+
     /**
      * Push new variables to the stack.
      *
