@@ -48,24 +48,29 @@
  */
 package org.knime.python2;
 
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+
+import org.knime.conda.CondaEnvironmentDirectory;
 
 /**
  * Conda-specific implementation of {@link PythonCommand}. Allows to build Python processes for a given Conda
- * installation and environment name. Takes care of resolving PATH-related issues on Windows.
+ * installation and environment. Takes care of resolving PATH-related issues on Windows.
+ * <P>
+ * Implementation note: This class duplicates code from {@code org.knime.python3.AbstractCondaPythonCommand}. Please
+ * consider reflecting changes made here there as well.
+ *
  *
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  * @author Carsten Haubold, KNIME GmbH, Konstanz, Germany
  */
-public final class CondaPythonCommand extends AbstractCondaPythonCommand {
+public final class CondaPythonCommand extends AbstractPythonCommand { // NOSONAR Superclass equality is sufficient.
 
-    private final String m_condaInstallationDirectoryPath;
+    private final CondaEnvironmentDirectory m_environmentDirectory;
 
     /**
      * Constructs a {@link PythonCommand} that describes a Python process of the given Python version that is run in the
-     * Conda environment identified by the given Conda installation directory and the given Conda environment name.<br>
+     * Conda environment identified by the given Conda installation directory and the given Conda environment
+     * directory.<br>
      * The validity of the given arguments is not tested.
      *
      * @param pythonVersion The version of Python environments launched by this command.
@@ -76,18 +81,26 @@ public final class CondaPythonCommand extends AbstractCondaPythonCommand {
      */
     public CondaPythonCommand(final PythonVersion pythonVersion, final String condaInstallationDirectoryPath,
         final String environmentDirectoryPath) {
-        super(pythonVersion, environmentDirectoryPath);
-        m_condaInstallationDirectoryPath = condaInstallationDirectoryPath;
+        this(pythonVersion, new CondaEnvironmentDirectory(environmentDirectoryPath, condaInstallationDirectoryPath));
+    }
+
+    private CondaPythonCommand(final PythonVersion pythonVersion,
+        final CondaEnvironmentDirectory environmentDirectory) {
+        super(pythonVersion, Arrays.asList(environmentDirectory.getPythonExecutableString()));
+        m_environmentDirectory = environmentDirectory;
+    }
+
+    /**
+     * @return The path to the directory of the Conda environment that is used by this instance.
+     */
+    public String getEnvironmentDirectoryPath() {
+        return m_environmentDirectory.getPath();
     }
 
     @Override
-    protected List<String> getAdditionalPathPrefixesForWindows() {
-        // Note that we use the condabin directory of the given Conda installation directory regardless of whether
-        // the given environment actually belongs to that Conda installation or a different instance. This is a
-        // possible source of complications, but there is no known way to determine the environment's "correct"
-        // Conda instance.
-        var prefixes = new ArrayList<String>();
-        prefixes.add(Paths.get(m_condaInstallationDirectoryPath, "condabin").toString());
-        return prefixes;
+    public ProcessBuilder createProcessBuilder() {
+        final var pb = super.createProcessBuilder();
+        m_environmentDirectory.patchEnvironmentVariables(pb.environment());
+        return pb;
     }
 }
