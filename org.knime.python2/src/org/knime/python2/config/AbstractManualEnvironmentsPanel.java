@@ -54,11 +54,17 @@ package org.knime.python2.config;
  */
 public abstract class AbstractManualEnvironmentsPanel<W> extends AbstractPythonConfigPanel<ManualEnvironmentsConfig, W> {
 
-    public AbstractManualEnvironmentsPanel(final ManualEnvironmentsConfig config, final W parent) {
+    public AbstractManualEnvironmentsPanel(final ManualEnvironmentsConfig config, final W parent, final boolean allowPython2) {
         super(config, parent);
         final W panel = getPanel();
-        createPython2PathWidget(config.getPython2Config(), panel);
+        if (allowPython2) {
+            createPython2PathWidget(config.getPython2Config(), panel);
+        }
         createPython3PathWidget(config.getPython3Config(), panel);
+    }
+
+    public AbstractManualEnvironmentsPanel(final ManualEnvironmentsConfig config, final W parent) {
+        this(config, parent, true);
     }
 
     protected abstract void createPython2PathWidget(ManualEnvironmentConfig python2Config, W panel);
