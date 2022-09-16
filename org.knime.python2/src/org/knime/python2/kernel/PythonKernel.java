@@ -69,6 +69,7 @@ import org.knime.python2.PythonVersion;
 import org.knime.python2.generic.ImageContainer;
 import org.knime.python2.kernel.PythonKernelBackendRegistry.PythonKernelBackendType;
 import org.knime.python2.port.PickledObject;
+import org.knime.python2.port.PickledObject.PickledObjectFileProvider;
 import org.knime.python2.port.PickledObjectFile;
 
 /**
@@ -79,7 +80,7 @@ import org.knime.python2.port.PickledObjectFile;
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  * @author Christian Dietz, KNIME GmbH, Konstanz, Germany
  */
-public class PythonKernel implements AsynchronousCloseable<PythonKernelCleanupException> {
+public class PythonKernel implements AsynchronousCloseable<PythonKernelCleanupException>, PickledObjectFileProvider {
 
     private static final NodeLogger LOGGER = NodeLogger.getLogger(PythonKernel.class);
 
@@ -373,6 +374,7 @@ public class PythonKernel implements AsynchronousCloseable<PythonKernelCleanupEx
      * @throws CanceledExecutionException if canceled. This instance must not be used after a cancellation occurred and
      *             must be {@link #close() closed}.
      */
+    @Override
     public PickledObjectFile getObject(final String name, final File file, final ExecutionMonitor executionMonitor)
         throws PythonIOException, CanceledExecutionException {
         return m_backend.getObject(name, file, executionMonitor);

@@ -65,7 +65,6 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.ModelContentRO;
 import org.knime.core.node.ModelContentWO;
 import org.knime.core.util.FileUtil;
-import org.knime.python2.kernel.PythonKernel;
 
 /**
  * Container for a pickled python object consisting of the object's byte representation, python type and a string
@@ -147,7 +146,8 @@ public class PickledObject {
     }
 
     /**
-     * Writes the object held by this instance into the provided file and returns a {@link PickledObjectFile} representing it.
+     * Writes the object held by this instance into the provided file and returns a {@link PickledObjectFile}
+     * representing it.
      *
      * @param file to write to
      * @return the {@link PickledObjectFile}
@@ -172,6 +172,12 @@ public class PickledObject {
         return new PickledObject(pickledObject, pickledObjectFile.getType(), pickledObjectFile.getRepresentation());
     }
 
+    public interface PickledObjectFileProvider {
+
+        PickledObjectFile getObject(String name, File file, ExecutionMonitor executionMonitor)
+            throws IOException, CanceledExecutionException;
+    }
+
     /**
      * Utility function for deprecated nodes that need to create a PickledObject with the new PythonKernel API.
      *
@@ -182,8 +188,8 @@ public class PickledObject {
      * @throws IOException if no temporary file could be created or reading the pickled object failed
      * @throws CanceledExecutionException if the user cancels the execution
      */
-    public static PickledObject getObject(final String name, final PythonKernel kernel, final ExecutionMonitor exec)
-        throws IOException, CanceledExecutionException {
+    public static PickledObject getObject(final String name, final PickledObjectFileProvider kernel,
+        final ExecutionMonitor exec) throws IOException, CanceledExecutionException {
         final var tmpFile = FileUtil.createTempFile("pickle", "object");
         var pickledObjectFile = kernel.getObject(name, tmpFile, exec);
         return fromPickledObjectFile(pickledObjectFile);

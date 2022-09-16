@@ -78,8 +78,6 @@ import org.knime.core.node.port.PortObjectZipInputStream;
 import org.knime.core.node.port.PortObjectZipOutputStream;
 import org.knime.core.node.port.PortType;
 import org.knime.core.node.port.PortTypeRegistry;
-import org.knime.python2.kernel.PythonIOException;
-import org.knime.python2.util.MemoryAlertAwareGuavaCache;
 
 /**
  * {@link FileStore}-based port object containing a {@link PickledObject}.
@@ -164,9 +162,9 @@ public final class PickledObjectFileStorePortObject extends FileStorePortObject 
          * @param file to pickle the object to
          * @return the PickledObjectFile
          * @throws CanceledExecutionException if the user cancels the node execution
-         * @throws PythonIOException if there are I/O issues on Python side
+         * @throws IOException if there are I/O issues on Python side
          */
-        PickledObjectFile produce(final File file) throws CanceledExecutionException, PythonIOException;
+        PickledObjectFile produce(final File file) throws CanceledExecutionException, IOException;
     }
 
     /**
