@@ -98,11 +98,17 @@ public final class PickledObjectPortObjectSpec extends AbstractSimplePortObjectS
         m_pickledObjectString = pickledObjectString;
     }
 
-    String getType() {
+    /**
+     * @return the name of the type of the pickled object
+     */
+    public String getType() {
         return m_pickledObjectType;
     }
 
-    String getRepresentation() {
+    /**
+     * @return a string representation of the pickled object
+     */
+    public String getRepresentation() {
         return m_pickledObjectString;
     }
 
