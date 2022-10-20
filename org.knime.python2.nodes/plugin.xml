@@ -23,7 +23,7 @@
         <node category-path="/scripting/python" factory-class="org.knime.python2.nodes.predictor.Python2PredictorNodeFactory" deprecated="true"/>
     </extension>
     <extension point="org.knime.workbench.repository.categories">
-        <category description="Python nodes" icon="icons/python.png" level-id="python" name="Python" path="/scripting" />
+        <category description="Python nodes" icon="icons/python.png" level-id="python" name="Python (legacy)" path="/scripting" />
     </extension>
     <extension point="org.knime.workbench.repository.registeredFileExtensions">
         <FileExtensionMapping NodeFactory="org.knime.python2.nodes.objectreader2.Python2ObjectReaderNodeFactory2">
