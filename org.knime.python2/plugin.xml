@@ -10,7 +10,7 @@
             category="org.knime.workbench.ui.preferences"
             class="org.knime.python2.prefs.PythonPreferencePage"
             id="org.knime.python2.PythonPreferencePage"
-            name="Python">
+            name="Python (legacy)">
       </page>
       <page
             category="org.knime.python2.PythonPreferencePage"
