@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.knime.features.python"
-      label="KNIME Python Integration (deprecated)"
+      label="KNIME Python 2 Integration (deprecated)"
       version="4.7.0.qualifier"
       provider-name="KNIME AG, Zurich, Switzerland">
 
    <description>
-      This plugin contains nodes that integrate Python (major version 2) into KNIME.
-The scripts run in a local Python installation (not included).
+      This extension contains the first version of the KNIME Python integration.
+The nodes integrate with Python 2 by running Python scripts in a local Python 2 installation (not included).
+Please refrain from using this extension if possible.
+Python 2 does not receive security updates anymore.
+Use the latest version of the Python integration, which integrates with Python 3.
    </description>
 
    <copyright>

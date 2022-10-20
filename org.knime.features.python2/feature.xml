@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.knime.features.python2"
-      label="KNIME Python Integration"
+      label="KNIME Python 2 Integration (legacy)"
       version="4.7.0.qualifier"
       provider-name="KNIME AG, Zurich, Switzerland">
 
    <description>
-      This plugin contains nodes that integrate Python (version 2 or 3) into KNIME. The library to use for transferring data between KNIME and Python can be chosen in the preferences. The scripts require a local Python installation (not included).
+      This extension contains the legacy version of the KNIME Python integration.
+The nodes integrate with Python 2 and Python 3 by running Python scripts in a local Python installation (not included).
+Please refrain from using this extension if possible.
+Use the latest version of the Python integration, which integrates only with Python 3.
    </description>
 
    <copyright>
