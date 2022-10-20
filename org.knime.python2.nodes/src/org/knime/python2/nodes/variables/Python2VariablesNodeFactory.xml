@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <knimeNode icon="./pythonvariables.png" type="Manipulator" xmlns="http://knime.org/node/v3.6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v3.6 http://knime.org/node/v3.6.xsd">
-   <name>Python Edit Variable</name>
+   <name>Python Edit Variable (legacy)</name>
 
    <shortDescription>
       Allows executing a Python script in a local Python environment.
