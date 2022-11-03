@@ -63,16 +63,29 @@ public class PythonOutputLogger implements PythonOutputListener {
 
     private final Consumer<String> m_debugLogger;
 
+    private static final String DEPRECATION_WARNING_SEARCH_STRING = "DeprecationWarning: ";
+
+    private final boolean m_showDeprecationWarningAsInfo;
+
     private volatile boolean m_disabled = false;
 
     /**
+     * Set up a PythonOutputLogger to log to the given {@link NodeLogger} instance.
+     *
+     * DeprecationWarnings from Python are downgraded to "info" messages in the {@link NodeLogger}.
+     *
      * @param logger The {@link NodeLogger} to which to write the messages received from Python.
      */
     public PythonOutputLogger(final NodeLogger logger) {
-        this(logger::info, logger::warn, logger::debug);
+        this(logger::info, logger::warn, logger::debug, true);
     }
 
     /**
+     * Set up a PythonOutputLogger to log to the given consumers for different log levels.
+     *
+     * In contrast to the constructor receiving a {@link NodeLogger}, {@link PythonOutputLogger}s constructed like this
+     * do not downgrade Python's DeprecationWarnings but show them as warnings.
+     *
      * @param infoLogger The logger to which to write info messages received from Python.
      * @param warningLogger The logger to which to write warning messages received from Python.
      * @param debugLogger May be {@code null}. If not {@code null}, the logger to which to write all messages received
@@ -80,9 +93,26 @@ public class PythonOutputLogger implements PythonOutputListener {
      */
     public PythonOutputLogger(final Consumer<String> infoLogger, final Consumer<String> warningLogger,
         final Consumer<String> debugLogger) {
+        this(infoLogger, warningLogger, debugLogger, false);
+    }
+
+    /**
+     * Set up a PythonOutputLogger to log to the given consumers for different log levels. You need to specify whether
+     * deprecation warnings should be shown as warnings or info.
+     *
+     * @param infoLogger The logger to which to write info messages received from Python.
+     * @param warningLogger The logger to which to write warning messages received from Python.
+     * @param debugLogger May be {@code null}. If not {@code null}, the logger to which to write all messages received
+     *            from Python while this instance is {@link #setDisabled(boolean) disabled}.
+     * @param showDeprecationWarningAsInfo If True, deprecation warnings will be downgraded to info when passed to the
+     *            provided consumers. Otherwise they will be propagated as warnings.
+     */
+    public PythonOutputLogger(final Consumer<String> infoLogger, final Consumer<String> warningLogger,
+        final Consumer<String> debugLogger, final boolean showDeprecationWarningAsInfo) {
         m_infoLogger = infoLogger;
         m_warningLogger = warningLogger;
         m_debugLogger = debugLogger;
+        m_showDeprecationWarningAsInfo = showDeprecationWarningAsInfo;
     }
 
     @Override
@@ -94,7 +124,11 @@ public class PythonOutputLogger implements PythonOutputListener {
     public void messageReceived(final String message, final boolean isWarningMessage) {
         if (!m_disabled) {
             if (isWarningMessage) {
-                m_warningLogger.accept(message);
+                if (m_showDeprecationWarningAsInfo && message.contains(DEPRECATION_WARNING_SEARCH_STRING)) {
+                    m_infoLogger.accept(message);
+                } else {
+                    m_warningLogger.accept(message);
+                }
             } else {
                 m_infoLogger.accept(message);
             }
