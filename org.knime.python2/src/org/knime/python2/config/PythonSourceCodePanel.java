@@ -345,6 +345,12 @@ public class PythonSourceCodePanel extends SourceCodePanel {
         } else {
             if ((exception.getMessage() != null) && !exception.getMessage().isEmpty()) {
                 errorToConsole(exception.getMessage());
+                if (exception.getCause() != null) {
+                    errorToConsole("Cause: " + exception.getCause().getMessage());
+                }
+            } else {
+                errorToConsole("Caught exception: " + exception.getClass().getName());
+                Arrays.stream(exception.getStackTrace()).forEach(s -> errorToConsole("    " + s));
             }
         }
         if (statusMessage != null) {
