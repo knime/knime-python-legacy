@@ -136,6 +136,22 @@ public class PythonIOException extends IOException implements PythonException {
     }
 
     /**
+     * @param message the message
+     * @param shortMessage a short high level error message
+     * @param formattedPythonTraceback The formatted string representation of the trace back of the error on Python
+     *            side. Together with the frame summaries, this basically corresponds to the {@code cause} argument in
+     *            {@link #PythonIOException(String, Throwable)} but for a cause on Python side.
+     * @param cause the cause of the problem
+     */
+    public PythonIOException(final String message, final String shortMessage, final String formattedPythonTraceback,
+        final Throwable cause) {
+        super(amendMessage(message), cause);
+        m_formattedPythonTraceback = formattedPythonTraceback;
+        m_pythonTraceBack = PythonUtils.Misc.extractPythonTraceback(cause).orElse(null);
+        m_shortMessage = shortMessage;
+    }
+
+    /**
      * @param cause the cause of the problem
      */
     public PythonIOException(final Throwable cause) {
