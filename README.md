@@ -102,4 +102,4 @@ You can find instructions on how to work with our code or develop extensions for
 ## Join the Community
 
 * [KNIME Forum](https://tech.knime.org/forum/knime-textprocessing)
-
+ 
