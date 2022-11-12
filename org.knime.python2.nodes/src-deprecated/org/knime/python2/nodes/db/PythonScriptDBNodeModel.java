@@ -82,6 +82,7 @@ import org.knime.python2.ports.DatabasePort;
  *
  * @author Tobias Koetter, KNIME AG, Zurich, Switzerland
  */
+@Deprecated
 class PythonScriptDBNodeModel extends PythonNodeModel<PythonScriptDBNodeConfig> {
 
     /**

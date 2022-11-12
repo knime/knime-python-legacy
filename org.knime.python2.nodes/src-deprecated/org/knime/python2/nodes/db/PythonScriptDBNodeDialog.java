@@ -47,46 +47,25 @@
  */
 package org.knime.python2.nodes.db;
 
-import org.knime.base.node.util.exttool.ExtToolStderrNodeView;
-import org.knime.base.node.util.exttool.ExtToolStdoutNodeView;
-import org.knime.core.node.NodeDialogPane;
-import org.knime.core.node.NodeFactory;
-import org.knime.core.node.NodeView;
+import org.knime.python2.nodes.PythonDataAwareNodeDialog;
+import org.knime.python2.nodes.PythonNodeDialogContent;
 
 /**
  * @author Tobias Koetter, KNIME AG, Zurich, Switzerland
  * @author Patrick Winter, KNIME AG, Zurich, Switzerland
+ * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  */
-public final class Python2ScriptDBNodeFactory extends NodeFactory<PythonScriptDBNodeModel> {
+@Deprecated
+final class PythonScriptDBNodeDialog extends PythonDataAwareNodeDialog {
 
-    @Override
-    public PythonScriptDBNodeModel createNodeModel() {
-        return new PythonScriptDBNodeModel();
+    public static PythonScriptDBNodeDialog create() {
+        final PythonScriptDBNodeDialog dialog = new PythonScriptDBNodeDialog();
+        final PythonNodeDialogContent content =
+            PythonNodeDialogContent.createWithDefaultPanels(dialog, PythonScriptDBNodeConfig.getInputPorts(),
+                new PythonScriptDBNodeConfig(), PythonScriptDBNodeConfig.getVariableNames(), "python-script");
+        dialog.initializeContent(content);
+        return dialog;
     }
 
-    @Override
-    public int getNrNodeViews() {
-        return 2;
-    }
-
-    @Override
-    public NodeView<PythonScriptDBNodeModel> createNodeView(final int viewIndex,
-        final PythonScriptDBNodeModel nodeModel) {
-        if (viewIndex == 0) {
-            return new ExtToolStdoutNodeView<>(nodeModel);
-        } else if (viewIndex == 1) {
-            return new ExtToolStderrNodeView<>(nodeModel);
-        }
-        return null;
-    }
-
-    @Override
-    public boolean hasDialog() {
-        return true;
-    }
-
-    @Override
-    public NodeDialogPane createNodeDialogPane() {
-        return PythonScriptDBNodeDialog.create();
-    }
+    private PythonScriptDBNodeDialog() {}
 }

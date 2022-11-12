@@ -56,6 +56,7 @@ import org.knime.python2.ports.InputPort;
  * @author Patrick Winter, KNIME AG, Zurich, Switzerland
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
  */
+@Deprecated
 final class PythonScriptDBNodeConfig extends PythonSourceCodeConfig {
 
     private static final String DB_UTIL_NAME = "db_util";

@@ -11,8 +11,8 @@
         <node category-path="/scripting/python-legacy" factory-class="org.knime.python2.nodes.objectwriter2.Python2ObjectWriterNodeFactory2" after="org.knime.python2.nodes.objectreader2.Python2ObjectReaderNodeFactory2"/>
         <node category-path="/scripting/python-legacy" factory-class="org.knime.python2.nodes.learner2.Python2LearnerNodeFactory2" after="org.knime.python2.nodes.objectwriter2.Python2ObjectWriterNodeFactory2"/>
         <node category-path="/scripting/python-legacy" factory-class="org.knime.python2.nodes.predictor2.Python2PredictorNodeFactory2" after="org.knime.python2.nodes.learner2.Python2LearnerNodeFactory2"/>
-        <node category-path="/scripting/python-legacy" factory-class="org.knime.python2.nodes.db.Python2ScriptDBNodeFactory" after="org.knime.python2.nodes.predictor2.Python2PredictorNodeFactory2"/>
-
+        
+        <node category-path="/scripting/python-legacy" factory-class="org.knime.python2.nodes.db.Python2ScriptDBNodeFactory"  deprecated="true"/>
         <node category-path="/scripting/python-legacy" factory-class="org.knime.python2.nodes.script.Python2ScriptNodeFactory" deprecated="true"/>
         <node category-path="/scripting/python-legacy" factory-class="org.knime.python2.nodes.script1in2out.Python2Script1In2OutNodeFactory" deprecated="true"/>
         <node category-path="/scripting/python-legacy" factory-class="org.knime.python2.nodes.script2in1out.Python2Script2In1OutNodeFactory" deprecated="true"/>
