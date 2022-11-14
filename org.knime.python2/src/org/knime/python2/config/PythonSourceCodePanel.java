@@ -87,6 +87,7 @@ import org.knime.python2.generic.SourceCodeConfig;
 import org.knime.python2.generic.SourceCodePanel;
 import org.knime.python2.generic.VariableNames;
 import org.knime.python2.kernel.PythonException;
+import org.knime.python2.kernel.PythonIOException;
 import org.knime.python2.kernel.PythonInstallationTestException;
 import org.knime.python2.kernel.PythonKernel;
 import org.knime.python2.kernel.PythonKernelBackendRegistry.PythonKernelBackendType;
@@ -345,9 +346,13 @@ public class PythonSourceCodePanel extends SourceCodePanel {
         } else {
             if ((exception.getMessage() != null) && !exception.getMessage().isEmpty()) {
                 errorToConsole(exception.getMessage());
-                if (exception.getCause() != null) {
-                    errorToConsole("Cause: " + exception.getCause().getMessage());
+
+                // Log to KNIME log
+                String message = exception.getMessage();
+                if (exception instanceof PythonIOException) {
+                    message = ((PythonIOException)exception).getShortMessage().orElse(message);
                 }
+                LOGGER.error(message, exception);
             } else {
                 errorToConsole("Caught exception: " + exception.getClass().getName());
                 Arrays.stream(exception.getStackTrace()).forEach(s -> errorToConsole("    " + s));
