@@ -25,11 +25,6 @@
     <extension point="org.knime.workbench.repository.categories">
         <category description="Python nodes (legacy)" icon="icons/python.png" level-id="python-legacy" name="Python (legacy)" path="/scripting" />
     </extension>
-    <extension point="org.knime.workbench.repository.registeredFileExtensions">
-        <FileExtensionMapping NodeFactory="org.knime.python2.nodes.objectreader2.Python2ObjectReaderNodeFactory2">
-            <FileExtension extension=".pkl"/>
-        </FileExtensionMapping>
-    </extension>
     <extension point="org.knime.python2.sourcecodetemplates">
         <directory path="templates/"/>
     </extension>
