@@ -141,7 +141,7 @@ public class PythonSourceCodePanel extends SourceCodePanel {
     private final PythonOutputListener m_stderrorToConsole = // NOSONAR Not intended for serialization.
         new PythonOutputLogger(this::messageToConsole, this::warningToConsole, null);
 
-    private final AtomicBoolean m_resetInProgress = new AtomicBoolean(false);
+    private final AtomicBoolean m_resetOrOpenInProgress = new AtomicBoolean(false);
 
     private Variable[] m_variables; // NOSONAR Not intended for serialization.
 
@@ -188,7 +188,20 @@ public class PythonSourceCodePanel extends SourceCodePanel {
     @Override
     public void open() {
         super.open();
-        startKernelManagerAsync(m_kernelOptions);
+        // AP-19677: Multiple kernel restarts are triggered asynchronously by changes to the flow variable that
+        // controls the Python command when the dialog is opened. Therefore we wait for briefly before we start the
+        // kernel and prevent restarts during that time.
+        m_resetOrOpenInProgress.set(true);
+        ThreadUtils.threadWithContext(() -> {
+            try {
+                Thread.sleep(500);
+                new PythonKernelManagerStartTask(m_kernelOptions).run();
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+                LOGGER.debug("Interrupted while waiting for the dialog to open.", ex);
+                m_resetOrOpenInProgress.set(false);
+            }
+        }).start();
     }
 
     private void startKernelManagerAsync(final PythonKernelOptions kernelOptions) {
@@ -451,8 +464,8 @@ public class PythonSourceCodePanel extends SourceCodePanel {
      * Runs the reset job for the dialog if its not already running.
      */
     private void runResetJob() {
-        if (getKernelManagerWrapper() != null && !m_resetInProgress.get()) {
-            m_resetInProgress.set(true);
+        if (getKernelManagerWrapper() != null && !m_resetOrOpenInProgress.get()) {
+            m_resetOrOpenInProgress.set(true);
             setRunning(true);
             ThreadUtils.threadWithContext(this::runReset).start();
         }
@@ -537,7 +550,7 @@ public class PythonSourceCodePanel extends SourceCodePanel {
 
         private void startKernelManager() {
             setStatusMessage("Starting Python...");
-            m_resetInProgress.set(false);
+            m_resetOrOpenInProgress.set(false);
             m_kernelRestarts++;
             PythonKernelManager manager = null;
             try { // NOSONAR We do not want to close the manager here.
@@ -599,7 +612,7 @@ public class PythonSourceCodePanel extends SourceCodePanel {
         private void putDataIntoKernel(final PythonKernelManager kernelManager, final int kernelRestartsBeforeLock) {
             if (kernelManager != null) {
                 // Don't push data if we are resetting the kernel anyways
-                if (m_resetInProgress.get()) {
+                if (m_resetOrOpenInProgress.get()) {
                     return;
                 }
                 kernelManager.putData(getVariableNames(), getFlowVariables(), m_inputData, m_pythonInputObjects,
