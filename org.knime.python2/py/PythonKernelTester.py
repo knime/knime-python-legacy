@@ -56,7 +56,7 @@ EnvironmentHelper.dummy_call()
 
 import sys
 
-from distutils.version import LooseVersion
+from VersionUtils import LooseVersion
 
 _default_min_pandas_version = '0.20.0'
 SEPARATOR = '__!__separator__!__'
