@@ -75,7 +75,7 @@ def LooseVersion(vstring):
     class LooseVersion(
         namedtuple(
             "MyLooseVersion",
-            [f"component_{i}" for i in range(len(version_components))])
+            ["component_" + str(i) for i in range(len(version_components))])
         ):
 
         def __repr__(self):
@@ -84,7 +84,7 @@ def LooseVersion(vstring):
         def __str__(self):
             return self.__repr__()
 
-    obj = LooseVersion._make(version_components)
-    obj.version = version_components
-    obj.vstring = vstring
-    return obj 
+    loose_version = LooseVersion._make(version_components)
+    loose_version.version = version_components
+    loose_version.vstring = vstring
+    return loose_version 
