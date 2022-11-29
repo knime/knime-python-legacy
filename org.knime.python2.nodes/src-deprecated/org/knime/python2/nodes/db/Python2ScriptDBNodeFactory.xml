@@ -12,19 +12,19 @@
 		   <p>
             This node is part of the deprecated database framework.
             For more information on how to migrate to the new database framework, please refer to the
-            <a href="https://docs.knime.com/latest/db_extension_guide/index.html#migration">migration section</a> of the 
-            <a href="https://docs.knime.com/latest/db_extension_guide/index.html">database documentation</a>.
+            <a href="https://docs.knime.com/2022-06/db_extension_guide/index.html#migration">migration section</a> of the 
+            <a href="https://docs.knime.com/2022-06/db_extension_guide/index.html">database documentation</a>.
            </p>
            <p>
 			Allows executing a Python script in a local Python
 			environment. The environment has to be configured
 			under <i>File → Preferences → KNIME → Python</i> or via flow variable, as described in the
-			<a href="https://docs.knime.com/latest/python_installation_guide/">
+			<a href="https://docs.knime.com/2022-06/python_installation_guide/">
 			KNIME Python Integration Installation Guide</a>.
 			<br/>
 			This node supports Python 2 and 3.
 			It also allows to import Jupyter notebooks as Python modules via the
-			<a href="https://docs.knime.com/latest/python_installation_guide/#_load_jupyter_notebooks_from_knime">
+			<a href="https://docs.knime.com/2022-06/python_installation_guide/#jupyter-notebooks">
 			knime_jupyter</a> module that is available in the node's Python workspace.
 		   </p>
 		   <p>
@@ -185,7 +185,7 @@
             allows using an environment that is different from the one that is configured in the KNIME Preferences.
             The flow variable accepts the path to a Python start script, executable, or Conda environment as
             described in the
-            <a href="https://docs.knime.com/latest/python_installation_guide/#configure_environments_per_node">
+            <a href="https://docs.knime.com/2022-06/python_installation_guide/#configure_environments_per_node">
                KNIME Python Integration Installation Guide
             </a>.
          </option>
@@ -194,7 +194,7 @@
             allows using an environment that is different from the one that is configured in the KNIME Preferences.
             The flow variable accepts the path to a Python start script, executable, or Conda environment as
             described in the
-            <a href="https://docs.knime.com/latest/python_installation_guide/#configure_environments_per_node">
+            <a href="https://docs.knime.com/2022-06/python_installation_guide/#configure_environments_per_node">
                KNIME Python Integration Installation Guide
             </a>.
          </option>

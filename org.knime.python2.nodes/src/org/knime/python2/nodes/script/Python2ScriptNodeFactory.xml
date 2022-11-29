@@ -12,12 +12,12 @@
 			Allows executing a Python script in a local Python
 			environment. The environment has to be configured
 			under <i>File → Preferences → KNIME → Python</i> or via flow variable, as described in the
-			<a href="https://docs.knime.com/latest/python_installation_guide/">
+			<a href="https://docs.knime.com/2022-06/python_installation_guide/">
 			KNIME Python Integration Installation Guide</a>.
 			<br/>
 			This node supports Python 2 and 3.
 			It also allows to import Jupyter notebooks as Python modules via the
-			<a href="https://docs.knime.com/latest/python_installation_guide/#_load_jupyter_notebooks_from_knime">
+			<a href="https://docs.knime.com/2022-06/python_installation_guide/#jupyter-notebooks">
 			knime_jupyter</a> module that is available in the node's Python workspace.
 		</intro>
       <tab name="Script">
@@ -159,14 +159,14 @@
             Controls which Python 2 environment is employed by this node if it is configured to use Python 2.
             This allows using an environment that is different from the one that is configured in the Preferences.
             The flow variable accepts the path to a Python start script as described in the
-            <a href="https://docs.knime.com/latest/python_installation_guide/#configure_environments_per_node">
+            <a href="https://docs.knime.com/2022-06/python_installation_guide/#configure_environments_per_node">
             KNIME Python Integration Installation Guide</a>.
          </option>
          <option name="python3Command">
             Controls which Python 3 environment is employed by this node if it is configured to use Python 3.
             This allows using an environment that is different from the one that is configured in the Preferences.
             The flow variable accepts the path to a Python start script as described in the
-            <a href="https://docs.knime.com/latest/python_installation_guide/#configure_environments_per_node">
+            <a href="https://docs.knime.com/2022-06/python_installation_guide/#configure_environments_per_node">
             KNIME Python Integration Installation Guide</a>.
          </option>
          <option name="sentinelOption">
