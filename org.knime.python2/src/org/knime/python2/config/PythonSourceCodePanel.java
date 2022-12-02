@@ -480,7 +480,8 @@ public class PythonSourceCodePanel extends SourceCodePanel {
         m_kernelOptions = m_kernelOptions.forAddedAdditionalRequiredModuleNames(Arrays.asList(name));
     }
 
-    private PythonKernelManager getKernelManager() {
+    /** @return the {@link PythonKernelManager} that is currently used. Might be <code>null</code>. */
+    public PythonKernelManager getKernelManager() {
         if (m_kernelManagerQueue.peekLast() != null) {
             return m_kernelManagerQueue.peekLast().getManager();
         }

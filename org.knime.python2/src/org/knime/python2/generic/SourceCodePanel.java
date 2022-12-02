@@ -294,6 +294,15 @@ public abstract class SourceCodePanel extends JPanel {
         }
     }
 
+    /**
+     * Add the given button to the workspace buttons
+     *
+     * @param button
+     */
+    public void addWorkspaceButton(final Component button) {
+        m_workspaceButtons.add(button);
+    }
+
     @Override
     public final void setLayout(final LayoutManager mgr) {
         super.setLayout(mgr);
