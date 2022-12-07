@@ -7,12 +7,12 @@
 	</parent>
 	<artifactId>org.knime.python2.serde.arrow.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-  
-    <properties>
-        <revision>5.0.0</revision>
+
+	<properties>
+		<revision>5.0.0</revision>
 	<sonar.sources/>
 	<sonar.tests>src</sonar.tests>
-    </properties>
+	</properties>
 
 	<build>
 		<plugins>
@@ -35,6 +35,16 @@
 							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<argLine>
+						${failsafeArgLine} -Darrow.enable_unsafe_memory_access=true -Darrow.enable_unsafe_memory_access=true -Darrow.memory.debug.allocator=false -Darrow.enable_null_check_for_get=false --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED
+					</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
