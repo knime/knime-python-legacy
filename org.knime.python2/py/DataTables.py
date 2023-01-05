@@ -200,24 +200,6 @@ class ToPandasTable:
     #                            java extension point the deserializer is registered at.
     # @param serializer          the serializer
     def __init__(self, column_names, column_types, column_serializers, serializer):
-        dtypes = {}
-        for i in range(len(column_names)):
-            name = column_names[i]
-            column_simple_type = column_types[i]
-            if column_simple_type == Simpletype.BOOLEAN:
-                column_dtype = numpy.bool
-            elif column_simple_type == Simpletype.INTEGER:
-                column_dtype = numpy.int32
-            elif column_simple_type == Simpletype.LONG:
-                column_dtype = numpy.int64
-            elif column_simple_type == Simpletype.DOUBLE:
-                column_dtype = numpy.float64
-            elif column_simple_type == Simpletype.FLOAT:
-                column_dtype = numpy.float32
-            else:
-                column_dtype = numpy.str
-            dtypes[name] = column_dtype
-        self._dtypes = dtypes
         self._column_names = column_names
         self._data_frame = DataFrame(columns=column_names)
         self._column_serializers = column_serializers
