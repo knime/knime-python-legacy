@@ -59,13 +59,6 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-
 import org.apache.arrow.memory.RootAllocator;
 import org.apache.arrow.vector.BigIntVector;
 import org.apache.arrow.vector.BitVector;
@@ -85,6 +78,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.util.FileUtil;
+import org.knime.core.util.JsonUtil;
 import org.knime.core.util.ThreadUtils;
 import org.knime.python2.extensions.serializationlibrary.SerializationException;
 import org.knime.python2.extensions.serializationlibrary.SerializationOptions;
@@ -150,6 +144,12 @@ import org.knime.python2.util.PythonUtils;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonReader;
+
 /**
  * Serializes tables to bytes and deserializes bytes to tables using the Apache Arrow Format. The serialized data is
  * written to temporary files, the file paths are shared via the command socket.
@@ -203,11 +203,11 @@ public class ArrowSerializationLibrary implements SerializationLibrary {
      */
     private static JsonObjectBuilder createColumnMetadataBuilder(final String name, final PandasType pandasType,
         final NumpyType numpyType, final Type knimeType, final String serializer) {
-        final JsonObjectBuilder colMetadataBuilder = Json.createObjectBuilder();
+        final JsonObjectBuilder colMetadataBuilder = JsonUtil.getProvider().createObjectBuilder();
         colMetadataBuilder.add("name", name);
         colMetadataBuilder.add("pandas_type", pandasType.getId());
         colMetadataBuilder.add("numpy_type", numpyType.getId());
-        final JsonObjectBuilder knimeMetadataBuilder = Json.createObjectBuilder();
+        final JsonObjectBuilder knimeMetadataBuilder = JsonUtil.getProvider().createObjectBuilder();
         knimeMetadataBuilder.add("type_id", knimeType.getId());
         knimeMetadataBuilder.add("serializer_id", serializer);
         colMetadataBuilder.add("metadata", knimeMetadataBuilder);
@@ -278,14 +278,14 @@ public class ArrowSerializationLibrary implements SerializationLibrary {
             try {
                 final String indexColName = "__index_level_0__";
                 // Metadata is transferred in JSON format.
-                final JsonObjectBuilder metadataBuilder = Json.createObjectBuilder();
+                final JsonObjectBuilder metadataBuilder = JsonUtil.getProvider().createObjectBuilder();
                 final TableSpec spec = tableIterator.getTableSpec();
                 inserters = new ArrayList<>();
-                final JsonArrayBuilder icBuilder = Json.createArrayBuilder();
+                final JsonArrayBuilder icBuilder = JsonUtil.getProvider().createArrayBuilder();
 
                 icBuilder.add(indexColName);
                 metadataBuilder.add("index_columns", icBuilder);
-                final JsonArrayBuilder colBuilder = Json.createArrayBuilder();
+                final JsonArrayBuilder colBuilder = JsonUtil.getProvider().createArrayBuilder();
                 final int numRows = tableIterator.getNumberRemainingRows();
                 // Row ids
                 final JsonObjectBuilder rowIdBuilder =
@@ -632,7 +632,8 @@ public class ArrowSerializationLibrary implements SerializationLibrary {
                         // Column format: {"name": String, "metadata": {"serializer_id": String, "type_id": int}}
                         final String customMetadata = metadata.get("ArrowSerializationLibrary");
                         if (customMetadata != null) {
-                            try (JsonReader jsreader = Json.createReader(new StringReader(customMetadata))) {
+                            try (JsonReader jsreader =
+                                JsonUtil.getProvider().createReader(new StringReader(customMetadata))) {
                                 final JsonObject jpandasMetadata = jsreader.readObject();
                                 final JsonArray indexCols = jpandasMetadata.getJsonArray("index_columns");
                                 final JsonArray cols = jpandasMetadata.getJsonArray("columns");
