@@ -1,13 +1,14 @@
 name: py36_knime_dl_gpu # Name of the created environment
 channels:               # Repositories to search for packages
-- defaults
-- anaconda
 - conda-forge
+- nodefaults
 dependencies:         # List of packages that should be installed
+- openssl=1.1.1       #
+- enum34=1.1.6
 - python=3.6          # Python
 - py4j                # Used for communication with KNIME
 - nomkl               # Prevents the use of Intel's MKL
-- pandas=0.23         # Table data structures
+- pandas              # Table data structures
 - jedi=0.13           # Python script autocompletion
 - python-dateutil=2.7 # Date and Time utilities
 - numpy=1.16.1        # N-dimensional arrays
@@ -19,10 +20,11 @@ dependencies:         # List of packages that should be installed
 - nbformat=4.4        # Notebook support
 - scipy=1.1           # Notebook support
 - jpype1=0.6.3        # Databases
-- tensorflow-gpu=1.12.0
-- keras=2.2.4
-- h5py=2.8
+- h5py=2.8.0
+- cudatoolkit=10.0.130 # CUDA 10
 - pip
 - pip:
+  - tensorflow-gpu==1.15.0 # CUDA 10
   - onnx==1.4.1
   - onnx-tf==1.2.1
+  - keras==2.2.4

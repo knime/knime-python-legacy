@@ -1,25 +1,24 @@
-name: py36_knime_tf2_cpu # Name of the created environment
-channels:                # Repositories to search for packages
-- defaults
-- anaconda
+name: py36_knime_tf2_cpu
+channels:
 - conda-forge
-dependencies:         # List of packages that should be installed
-- python=3.6          # Python
-- py4j                # Used for communication with KNIME
-- nomkl               # Prevents the use of Intel's MKL
-- pandas=0.23         # Table data structures
-- jedi=0.13           # Python script autocompletion
-- python-dateutil=2.7 # Date and Time utilities
-- numpy=1.16.1        # N-dimensional arrays
-- cairo=1.14          # SVG support
-- pillow=5.3          # Image inputs/outputs
-- matplotlib=3.0      # Plotting
-- pyarrow>=5.0.0       # Arrow serialization
-- IPython=7.1         # Notebook support
-- nbformat=4.4        # Notebook support
-- scipy=1.1           # Notebook support
-- jpype1=0.6.3        # Databases
+- nodefaults
+dependencies:
+- python=3.6
+- py4j
+- nomkl
+- pandas=0.23
+- jedi=0.13
+- python-dateutil=2.7
+- numpy=1.16.1
+- cairo=1.14
+- pillow=5.3
+- matplotlib=3.0
+- pyarrow>=5.0.0
+- IPython=7.1
+- nbformat=4.4
+- scipy=1.1
+- jpype1=0.6.3
 - pip
 - pip:
-  - tensorflow==2.2
+  - tensorflow==2.3.0
   - tensorflow-hub==0.8

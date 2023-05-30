@@ -1,8 +1,7 @@
 name: py38_knime_tf2_cpu # Name of the created environment
 channels:                # Repositories to search for packages
-- defaults
-- anaconda
 - conda-forge
+- nodefaults
 dependencies:            # List of packages that should be installed
 - python=3.8             # Python
 - py4j                   # used for KNIME <-> Python communication
@@ -30,4 +29,4 @@ dependencies:            # List of packages that should be installed
   - onnx-tf
   - tensorflow==2.5
   - tensorflow-hub
-
+  - tensorflow-addons==0.20.0

@@ -1,6 +1,7 @@
 name: py38_knime         # Name of the created environment
 channels:                # Repositories to search for packages
 - conda-forge
+- nodefaults
 dependencies:            # List of packages that should be installed
 - python=3.8             # Python
 - py4j                   # used for KNIME <-> Python communication
@@ -18,9 +19,8 @@ dependencies:            # List of packages that should be installed
 - scipy                  # Notebook support
 - jpype1                 # Databases
 - python-flatbuffers<2.0 # because tensorflow expects a version before 2
-- h5py<3.0 # must be < 3.0 because they changed whether str or byte is returned
+- h5py<3.0               # must be < 3.0 because they changed whether str or byte is returned
 - protobuf>3.12
 - libiconv               # MDF Reader node
 - asammdf=5.19.14        # MDF Reader node
-
-
+- pip

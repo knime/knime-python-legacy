@@ -1,6 +1,7 @@
 name: py39_knime         # Name of the created environment
 channels:                # Repositories to search for packages
 - conda-forge
+- nodefaults
 dependencies:            # List of packages that should be installed
 - python=3.9             # Python
 - py4j                   # used for KNIME <-> Python communication
@@ -24,4 +25,3 @@ dependencies:            # List of packages that should be installed
 - pip
 - pip:
   - JPype1 # Databases
-

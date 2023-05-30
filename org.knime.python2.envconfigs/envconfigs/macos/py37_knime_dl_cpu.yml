@@ -1,32 +1,27 @@
-name: py37_knime_dl_cpu     # Name of the created environment
-channels:                   # Repositories to search for packages
-- defaults
-- anaconda
+name: py36_knime_dl_cpu
+channels:
 - conda-forge
-dependencies:               # List of packages that should be installed
-- python=3.7                # Python
-- py4j                      # used for KNIME <-> Python communication
-- nomkl                     # Prevents the use of Intel's MKL
-- pandas                    # Table data structures
-- jedi<=0.17.2              # Python script autocompletion
-- python-dateutil           # Date and Time utilities
-- numpy                     # N-dimensional arrays
-- cairo                     # SVG support
-- pillow                    # Image inputs/outputs
-- matplotlib                # Plotting
-- pyarrow=6.0               # Arrow serialization
-- IPython                   # Notebook support
-- nbformat                  # Notebook support
-- scipy                     # Notebook support
-- jpype1                    # Databases
-- tensorflow-mkl=1.15
-- tensorflow-estimator=1.15 # or mac will install 2.6 which doesn't work
-- tensorflow-hub
+- nodefaults
+dependencies:
+- python=3.6
+- protobuf<=3.20
+- py4j
+- nomkl
+- pandas=0.23
+- jedi=0.13
+- python-dateutil=2.7
+- numpy=1.16.1
+- cairo=1.14
+- pillow=5.3
+- matplotlib=3.0
+- pyarrow>=5.0.0
+- IPython=7.1
+- nbformat=4.4
+- scipy=1.1.*
+- jpype1=0.6.3
 - keras=2.2.4
-- h5py<3.0 # must be < 3.0 because they changed whether str or byte is returned
-- libiconv                  # MDF Reader node
-- asammdf=5.19.14           # MDF Reader node
+- h5py=2.8
 - pip
 - pip:
-  - onnx==1.5
-  - onnx-tf==1.5
+  - onnx==1.4.1
+  - onnx-tf==1.2.1

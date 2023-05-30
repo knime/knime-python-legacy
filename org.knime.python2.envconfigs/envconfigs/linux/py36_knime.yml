@@ -1,6 +1,7 @@
 name: py36_knime            # Name of the created environment
 channels:                   # Repositories to search for packages
 - conda-forge
+- nodefaults
 dependencies:               # List of packages that should be installed
 - python=3.6                # Python
 - py4j                      # used for KNIME <-> Python communication

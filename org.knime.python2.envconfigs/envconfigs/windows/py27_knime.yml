@@ -1,7 +1,6 @@
 name: py27_knime      # Name of the created environment
 channels:             # Repositories to search for packages
 - defaults
-- anaconda
 - conda-forge
 dependencies:         # List of packages that should be installed
 - python=2.7          # Python

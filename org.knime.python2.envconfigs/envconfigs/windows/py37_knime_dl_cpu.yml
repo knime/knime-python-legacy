@@ -1,8 +1,7 @@
 name: py37_knime_dl_cpu     # Name of the created environment
 channels:                   # Repositories to search for packages
-- defaults
-- anaconda
 - conda-forge
+- nodefaults
 dependencies:               # List of packages that should be installed
 - python=3.7                # Python
 - py4j                      # used for KNIME <-> Python communication
@@ -19,14 +18,13 @@ dependencies:               # List of packages that should be installed
 - nbformat                  # Notebook support
 - scipy                     # Notebook support
 - jpype1                    # Databases
-- tensorflow-mkl=1.15
-- tensorflow-estimator=1.15 # or mac will install 2.6 which doesn't work
-- tensorflow-hub
 - keras=2.2.4
-- h5py<3.0 # must be < 3.0 because they changed whether str or byte is returned
+- h5py<3.0                  # must be < 3.0 because they changed whether str or byte is returned
 - libiconv                  # MDF Reader node
 - asammdf=5.19.14           # MDF Reader node
 - pip
 - pip:
-  - onnx==1.5
-  - onnx-tf==1.5
+  - tensorflow-estimator==1.14.0
+  - tensorflow-hub
+  - onnx==1.5.0
+  - onnx-tf==1.5.0
