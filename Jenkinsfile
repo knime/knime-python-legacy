@@ -203,7 +203,7 @@ try {
                 )                
                 sh(
                     label: 'conda ls',
-                    script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\"
+                    script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\"
                 )              
                 sh(
                     label: 'What Shell',
@@ -226,9 +226,9 @@ try {
 
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
-                    sh(
+                    sh( // C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat
                         label: 'conda build',
-                        script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe env create \
+                        script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat env create \
                             -p ${rootPrefix}\\${pyEnv} \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
                             -r ${rootPrefix} \
