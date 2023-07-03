@@ -173,12 +173,25 @@ try {
             String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
 
+            environment { // necessary for Scripts\wheel.exe
+                MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\',
+                PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
+            }
+
             stage('Prepare Windows') {
                 env.lastStage = env.STAGE_NAME
                 checkout scm
                 sh(
                     label: 'env list ',
                     script: "micromamba.exe env list"
+                )
+                sh(
+                    label: 'env',
+                    script: "echo $PATH"
+                )
+                sh(
+                    label: 'env',
+                    script: "echo $MAMBA_ROOT_PREFIX"
                 )
                 sh(
                     label: 'echo path ',
@@ -210,9 +223,6 @@ try {
                 )              
             }
 
-            environment { // necessary for Scripts\wheel.exe
-                MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\'
-            }
 
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
