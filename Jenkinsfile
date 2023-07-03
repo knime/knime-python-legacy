@@ -72,6 +72,7 @@ try {
     def OSCONDABUILD = [:]
 
     // linux-64
+    /*
     OSCONDABUILD["linux-64"] = {
         node('ubuntu22.04 && workflow-tests') {
             stage('Prepare Linux') {
@@ -118,6 +119,8 @@ try {
             )
         }
     }
+    */
+
     // osx-64
     OSCONDABUILD["osx-64"] = {
         node('macosx && workflow-tests && python3' ) {
