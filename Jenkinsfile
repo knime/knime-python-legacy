@@ -106,8 +106,9 @@ try {
                         label: 'create conda env',
                         script: "conda env create \
                             -f ${ymlPath}/${pyEnv}.yml \
-                            --yes \
-                            --json",
+                            -d \
+                            -q \
+                            --force --json",
                     )
                 }
             }
@@ -152,7 +153,9 @@ try {
                         script: "conda env create  \
                         -p ${rootPrefix}/${pyEnv} \
                         -f ${ymlPath}/${pyEnv}.yml \
-                        --json --quiet --yes",
+                        -q \
+                        -d \
+                        --json",
                     )
                 }
             }
@@ -182,8 +185,12 @@ try {
                     script: "micromamba.exe --version"
                 )                
                 sh(
+                    label: 'conda ls',
+                    script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\"
+                )              
+                sh(
                     label: 'conda info',
-                    script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe info"
+                    script: '''"C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe" info'''
                 )              
                 sh(
                     label: 'What Shell',
