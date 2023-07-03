@@ -26,43 +26,43 @@ static final String[] OS_VERSIONS = ['linux', 'macos', 'windows']
 
 @groovy.transform.Field
 static final String[] PYTHON_LINUX_ENV = [
-    'py27_knime',
-    'py36_knime_dl_cpu',
-    'py36_knime_dl_gpu',
-    'py36_knime_tf2_cpu', 
-    'py36_knime_tf2_gpu',
-    'py38_knime',
-    'py38_knime_tf2_cpu', 
+    //'py27_knime',
+    //'py36_knime_dl_cpu',
+    //'py36_knime_dl_gpu',
+    //'py36_knime_tf2_cpu', 
+    //'py36_knime_tf2_gpu',
+    //'py38_knime',
+    //'py38_knime_tf2_cpu', 
     'py39_knime',
     'py39_knime_tf2_cpu'
 ]
 
 @groovy.transform.Field
 static final String[] PYTHON_MACOS_64_ENV = [
-    'py27_knime',
-    'py36_knime_dl_cpu',
-    'py36_knime_tf2_cpu',
-    'py36_knime',
-    'py37_knime_dl_cpu',
-    'py37_knime',
-    'py38_knime_tf2_cpu',
-    'py38_knime',
+    //'py27_knime',
+    //'py36_knime_dl_cpu',
+    //'py36_knime_tf2_cpu',
+    //'py36_knime',
+    //'py37_knime_dl_cpu',
+    //'py37_knime',
+    //'py38_knime_tf2_cpu',
+    //'py38_knime',
     'py39_knime_tf2_cpu',
     'py39_knime'
 ]
 
 @groovy.transform.Field
 static final String[] PYTHON_WIN_64_ENV = [
-    'py38_knime',
-    'py38_knime_tf2_cpu',
-    'py27_knime',
-    'py36_knime',
-    'py36_knime_dl_cpu',
-    'py36_knime_dl_gpu',
-    'py36_knime_tf2_cpu',
-    'py36_knime_tf2_gpu',
-    'py37_knime',
-    'py37_knime_dl_cpu',
+    //'py27_knime',
+    //'py36_knime',
+    //'py36_knime_dl_cpu',
+    //'py36_knime_dl_gpu',
+    //'py36_knime_tf2_cpu',
+    //'py36_knime_tf2_gpu',
+    //'py37_knime',
+    //'py37_knime_dl_cpu',
+    //'py38_knime',
+    //'py38_knime_tf2_cpu',
     'py39_knime_tf2_cpu',
     'py39_knime',
 ]
