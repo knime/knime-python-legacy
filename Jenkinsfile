@@ -193,7 +193,7 @@ try {
                     script: '''
                         set exe_path="C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
                         set arg="info"
-                        call %exe_path% %arg%
+                        %exe_path% %arg%
                     '''
                 )              
                 sh(
