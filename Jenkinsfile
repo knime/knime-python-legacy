@@ -193,6 +193,7 @@ try {
                     script: '''
                         set exe_path="C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
                         set arg="info"
+                        set -m
                         %exe_path% %arg%
                     '''
                 )              
