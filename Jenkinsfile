@@ -192,8 +192,8 @@ try {
                     label: 'conda info',
                     script: '''
                         set exe_path="C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
-                        set arguemnt="info"
-                        start "" %exe_path% %arguemtn%
+                        set arg="info"
+                        start "" %exe_path% %arg%
                     '''
                 )              
                 sh(
