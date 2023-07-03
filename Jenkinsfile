@@ -20,6 +20,218 @@ properties([
     disableConcurrentBuilds()
 ])
 
+
+@groovy.transform.Field
+static final String[] OS_VERSIONS = ['linux', 'macos', 'windows']
+
+@groovy.transform.Field
+static final String[] PYTHON_LINUX_ENV = [
+    'py27_knime',
+    'py36_knime_dl_cpu',
+    'py36_knime_dl_gpu',
+    'py36_knime_tf2_cpu', 
+    'py36_knime_tf2_gpu',
+    'py38_knime',
+    'py38_knime_tf2_cpu', 
+    'py39_knime',
+    'py39_knime_tf2_cpu'
+]
+
+@groovy.transform.Field
+static final String[] PYTHON_MACOS_64_ENV = [
+    'py27_knime',
+    'py36_knime_dl_cpu',
+    'py36_knime_tf2_cpu',
+    'py36_knime',
+    'py37_knime_dl_cpu',
+    'py37_knime',
+    'py38_knime_tf2_cpu',
+    'py38_knime',
+    'py39_knime_tf2_cpu',
+    'py39_knime'
+]
+
+@groovy.transform.Field
+static final String[] PYTHON_WIN_64_ENV = [
+    'py38_knime',
+    'py38_knime_tf2_cpu',
+    'py27_knime',
+    'py36_knime',
+    'py36_knime_dl_cpu',
+    'py36_knime_dl_gpu',
+    'py36_knime_tf2_cpu',
+    'py36_knime_tf2_gpu',
+    'py37_knime',
+    'py37_knime_dl_cpu',
+    'py39_knime_tf2_cpu',
+    'py39_knime',
+]
+
+try {
+
+    def OSCONDABUILD = [:]
+
+    // linux-64
+    OSCONDABUILD["linux-64"] = {
+        node('ubuntu22.04 && workflow-tests') {
+            stage('Prepare Linux') {
+                env.lastStage = env.STAGE_NAME
+                checkout scm
+                sh(
+                    label: 'Check env list',
+                    script: "micromamba env list",
+                )        
+                sh(
+                    label: 'Check micromamba version',
+                    script: "micromamba info",
+                )                   
+                sh(
+                    label: 'Check micromamba version',
+                    script: "conda info",
+                )        
+            }
+
+            String ymlPath = "${env.WORKSPACE}/org.knime.python2.envconfigs/envconfigs/linux"
+
+            for (pyEnv in PYTHON_LINUX_ENV) {
+                stage("Linux ${pyEnv}") {
+                    sh(
+                        label: 'create micromamba env',
+                        script: "micromamba env create \
+                            -f ${ymlPath}/${pyEnv}.yml \
+                            --yes \
+                            --json",
+                    )
+                    sh(
+                        label: 'create conda env',
+                        script: "conda env create \
+                            -f ${ymlPath}/${pyEnv}.yml \
+                            --yes \
+                            --json",
+                    )
+                }
+            }
+            sh(
+                label: 'create list',
+                script: "micromamba env list",
+            )
+        }
+    }
+    // osx-64
+    OSCONDABUILD["osx-64"] = {
+        node('macosx && workflow-tests') {
+
+            stage('Prepare MacOS') {
+                env.lastStage = env.STAGE_NAME
+                checkout scm
+                sh(
+                    label: 'Check env list',
+                    script: "micromamba env list",
+                )                 
+                sh(
+                    label: 'Check env list',
+                    script: "conda info",
+                )    
+            }
+
+            String rootPrefix = "${env.WORKSPACE}/org.knime.python2.envconfigs/envs"
+            String ymlPath = "${env.WORKSPACE}/org.knime.python2.envconfigs/envconfigs/macos"
+            
+            for (pyEnv in PYTHON_MACOS_64_ENV) {
+                stage("MacOSX ${pyEnv}") {
+                    sh "echo ${env.WORKSPACE}"
+                    sh(
+                        label: 'micromamba create env', 
+                        script: "micromamba env create  \
+                        -p ${rootPrefix}/${pyEnv} \
+                        -f ${ymlPath}/${pyEnv}.yml \
+                        --json --quiet --yes",
+                    )                    
+                    sh(
+                        label: 'conda create env', 
+                        script: "conda env create  \
+                        -p ${rootPrefix}/${pyEnv} \
+                        -f ${ymlPath}/${pyEnv}.yml \
+                        --json --quiet --yes",
+                    )
+                }
+            }
+            sh(
+                label: 'Check env list',
+                script: "micromamba env list",
+            )        
+        }
+    }
+
+    // windows
+    OSCONDABUILD["win-64"] = {
+        node('windows && workflow-tests') {
+
+            String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
+            String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+
+            stage('Prepare Windows') {
+                env.lastStage = env.STAGE_NAME
+                checkout scm
+                sh(
+                    label: 'env list ',
+                    script: "micromamba.exe env list"
+                )
+                sh(
+                    label: 'micromamba version ',
+                    script: "micromamba.exe --version"
+                )                
+                sh(
+                    label: 'conda info',
+                    script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe info"
+                )              
+                sh(
+                    label: 'What Shell',
+                    script: '''
+                        echo $SHELL
+                    '''
+                )
+            }
+
+            environment { // necessary for Scripts\wheel.exe
+                MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\'
+            }
+
+            for (pyEnv in PYTHON_WIN_64_ENV) {
+                stage("Windows ${pyEnv}") {
+                    sh(
+                        label: 'conda build',
+                        script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe env create \
+                            -p ${rootPrefix}\\${pyEnv} \
+                            -f ${mambaPrefix}\\\\${pyEnv}.yml \
+                            -r ${rootPrefix} \
+                            --json --yes"
+                    )
+                    sh(
+                        label: 'micromamba build',
+                        script: "micromamba.exe env create  \
+                            -p ${rootPrefix}\\${pyEnv} \
+                            -f ${mambaPrefix}\\\\${pyEnv}.yml \
+                            -r ${rootPrefix} \
+                            --json --yes"
+                    )
+                }
+            }
+            sh(
+                label: 'list environment ',
+                script: "micromamba.exe env list"
+            )
+        }
+    }
+    parallel(OSCONDABUILD)
+ } catch (ex) {
+     currentBuild.result = 'FAILURE'
+     throw ex
+ } finally {
+     notifications.notifyBuild(currentBuild.result);
+ }
+
+
 try {
     knimetools.defaultTychoBuild('org.knime.update.python.legacy', 'maven && python2 && python3 && java17')
 
