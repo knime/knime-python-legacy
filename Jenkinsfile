@@ -193,12 +193,7 @@ try {
                     script: '''
                         set exe_path="C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
                         set arguemnt="info"
-                        if exist %exe_path% (
-                            echo Executing %exe_path%...
-                            start "" %exe_path% %arguemtn%
-                        ) else (
-                            echo File not found: %exe_path%
-                        )
+                        start "" %exe_path% %arguemtn%
                     '''
                 )              
                 sh(
