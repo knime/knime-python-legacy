@@ -181,6 +181,10 @@ try {
                     script: "micromamba.exe env list"
                 )
                 sh(
+                    label: 'echo path ',
+                    script: "echo %PATH%",
+                )
+                sh(
                     label: 'micromamba version ',
                     script: "micromamba.exe --version"
                 )                
@@ -188,6 +192,18 @@ try {
                     label: 'conda ls',
                     script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\"
                 )              
+                sh(
+                    label: 'What Shell',
+                    script: '''
+                        echo $SHELL
+                    '''
+                )
+                sh(
+                    label: 'What Shell',
+                    script: '''
+                        echo %SHELL%
+                    '''
+                )
                 sh(
                     label: 'conda info',
                     script: '''
@@ -197,12 +213,6 @@ try {
                         %exe_path% %arg%
                     '''
                 )              
-                sh(
-                    label: 'What Shell',
-                    script: '''
-                        echo $SHELL
-                    '''
-                )
             }
 
             environment { // necessary for Scripts\wheel.exe
