@@ -120,7 +120,7 @@ try {
     }
     // osx-64
     OSCONDABUILD["osx-64"] = {
-        node('macosx && workflow-tests') {
+        node('macosx && workflow-tests && python3' ) {
 
             stage('Prepare MacOS') {
                 env.lastStage = env.STAGE_NAME
@@ -168,14 +168,14 @@ try {
 
     // windows
     OSCONDABUILD["win-64"] = {
-        node('windows && workflow-tests') {
+        node('windows && workflow-tests && python3') {
 
             String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
 
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\',
-                PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
+                // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
             }
 
             stage('Prepare Windows') {
