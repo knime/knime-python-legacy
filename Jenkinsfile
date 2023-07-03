@@ -190,7 +190,16 @@ try {
                 )              
                 sh(
                     label: 'conda info',
-                    script: '''"C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe" info'''
+                    script: '''
+                    @echo off
+                        set exe_path="C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
+                        if exist %exe_path% (
+                            echo Executing %exe_path%...
+                            start "" %exe_path%
+                        ) else (
+                            echo File not found: %exe_path%
+                        )
+                    '''
                 )              
                 sh(
                     label: 'What Shell',
