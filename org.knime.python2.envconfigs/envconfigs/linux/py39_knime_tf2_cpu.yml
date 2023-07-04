@@ -20,6 +20,7 @@ dependencies:            # List of packages that should be installed
 - h5py<3.0 # must be < 3.0 because they changed whether str or byte is returned
 - protobuf>3.12          # Lower protobuf versions do not work with TensorFlow 2
 - libiconv               # MDF Reader node
+- pandas=1.4.4           # Table data structures
 - asammdf=5.19.14        # MDF Reader node
 - pip
 - pip:
@@ -28,4 +29,3 @@ dependencies:            # List of packages that should be installed
   - tensorflow==2.5
   - tensorflow-hub
   - JPype1 # Databases
-  - pandas                 # Table data structures
