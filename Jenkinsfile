@@ -171,7 +171,7 @@ try {
 
     // windows
     OSCONDABUILD["win-64"] = {
-        node('windows && workflow-tests && python3') {
+        node('windows && workflow-tests') {
 
             String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
@@ -189,18 +189,6 @@ try {
                     script: "micromamba.exe env list"
                 )
                 sh(
-                    label: 'env',
-                    script: "echo $PATH"
-                )
-                sh(
-                    label: 'env',
-                    script: "echo $MAMBA_ROOT_PREFIX"
-                )
-                sh(
-                    label: 'echo path ',
-                    script: "echo %PATH%",
-                )
-                sh(
                     label: 'micromamba version ',
                     script: "micromamba.exe --version"
                 )                
@@ -209,20 +197,8 @@ try {
                     script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\"
                 )              
                 sh(
-                    label: 'What Shell',
-                    script: '''
-                        echo $SHELL
-                    '''
-                )
-                sh(
-                    label: 'What Shell',
-                    script: '''
-                        echo %SHELL%
-                    '''
-                )
-                sh(
                     label: 'conda info',
-                    script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe info"
+                    script: "conda.exe info"
                 )              
             }
 
