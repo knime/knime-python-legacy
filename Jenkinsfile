@@ -177,7 +177,7 @@ try {
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
 
             environment { // necessary for Scripts\wheel.exe
-                MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\',
+                MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\'
                 // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
             }
 
