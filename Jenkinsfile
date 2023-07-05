@@ -195,16 +195,16 @@ try {
                     script: "micromamba.exe --version"
                 )                
                 sh(
-                    label: 'shell version ',
-                    script: "which $SHELL"
-                )                
-                sh(
                     label: 'version conda.bat ',
-                    script: "conda.bat info",
+                    script: "conda.bat info"
                 )                
                 sh(
                     label: 'version ',
-                    script: "conda.bat info",
+                    script: "conda.bat info"
+                )                
+                sh(
+                    label: 'shell version ',
+                    script: "which $SHELL"
                 )                
                 sh(
                     label: 'conda ls',
