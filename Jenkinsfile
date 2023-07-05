@@ -197,10 +197,6 @@ try {
                 checkout scm
 
                 sh(
-                    label: 'micromamba info',
-                    script: "micromamba.exe install wheel -c conda-forge"
-                )
-                sh(
                     label: 'micromamba ls',
                     script: "ls ${mambaRoot}"
                 )
@@ -219,6 +215,10 @@ try {
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
                     /*
+                sh(
+                    label: 'micromamba info',
+                    script: "micromamba.exe install wheel -c conda-forge"
+                )
                     sh(
                         label: 'conda build',
                         script: "${condaBat} env create \
