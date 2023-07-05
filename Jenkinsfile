@@ -218,6 +218,10 @@ try {
                 )
                 */
                 sh(
+                    label: 'micromamba ls',
+                    script: "ls ${mambaRoot}"
+                )
+                sh(
                     label: 'micromamba info',
                     script: "micromamba.exe info"
                 )
