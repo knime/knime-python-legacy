@@ -195,7 +195,7 @@ try {
                 MAMBA_ROOT_PREFIX = "${condaRoot}"
                 // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
             }
-
+            /*
             stage('Prepare Windows') {
                 env.lastStage = env.STAGE_NAME
                 checkout scm
@@ -214,7 +214,7 @@ try {
                     script:  "${condaBat} info"
                 )
             }
-
+            */
 
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
