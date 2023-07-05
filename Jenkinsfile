@@ -188,7 +188,7 @@ try {
             String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
 
             environment { // necessary for Scripts\wheel.exe
-                MAMBA_ROOT_PREFIX = "${mambaRoot}"
+                MAMBA_ROOT_PREFIX = "${condaRoot}"
                 // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
             }
 
@@ -196,31 +196,15 @@ try {
                 env.lastStage = env.STAGE_NAME
                 checkout scm
 
-                /* 
-                script {
-                    // Execute the bash script
-                    def exitCode = sh(returnStatus: true, script: '''
-                        echo $SHELL 
-                        echo $PATH
-                    ''')
-
-                    if (exitCode != 0) {
-                        println "Exit code: ${exitCode}"
-                    }
-                }
                 sh(
-                    label: 'env list ',
-                    script: "micromamba.exe clean --all --yes"
+                    label: 'micromamba info',
+                    script: "micromamba.exe install wheel -c conda-forge"
                 )
-                sh(
-                    label: 'micromamba version ',
-                    script: "micromamba.exe --version"
-                )
-                */
                 sh(
                     label: 'micromamba ls',
                     script: "ls ${mambaRoot}"
                 )
+                
                 sh(
                     label: 'micromamba info',
                     script: "micromamba.exe info"
