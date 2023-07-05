@@ -190,7 +190,6 @@ try {
             String condaRoot = "C:/Users/jenkins/Miniconda3/"
 
             String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
-            String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
             String envPrefix = "org.knime.python2.envconfigs/envconfigs/windows"
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = "${condaRoot}"
