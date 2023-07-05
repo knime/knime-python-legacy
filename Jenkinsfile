@@ -173,7 +173,7 @@ try {
 
     // windows
     OSCONDABUILD["win-64"] = {
-        node('windows && workflow-tests && python3') {
+        node('windows && workflow-tests ') {
 
             String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
