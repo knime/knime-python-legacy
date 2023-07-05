@@ -216,11 +216,16 @@ try {
                 )
                 sh(
                     label: 'env list ',
-                    script: "micromamba.exe env list"
+                    script: "micromamba.exe clean --all
+"
                 )
                 sh(
                     label: 'micromamba version ',
                     script: "micromamba.exe --version"
+                )
+                sh(
+                    label: 'micromamba info',
+                    script: "micromamba.exe info"
                 )
             }
 
