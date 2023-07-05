@@ -173,7 +173,7 @@ try {
 
     // windows
     OSCONDABUILD["win-64"] = {
-        node('windows && workflow-tests') {
+        node('windows && workflow-tests && python3') {
 
             String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
@@ -186,6 +186,28 @@ try {
             stage('Prepare Windows') {
                 env.lastStage = env.STAGE_NAME
                 checkout scm
+
+                // --->>
+                script {
+                    // Execute the bash script
+                    def exitCode = sh(returnStatus: true, script: '''
+                        # Your bash script commands here
+                        # ...
+                        # Return an exit code based on success or failure
+                        conda.exe info
+                    ''')
+                    
+                    // Check the exit code and handle accordingly
+                    if (exitCode != 0) {
+                        // Print a message to indicate the failure
+                        println "Bash script failed with exit code: ${exitCode}"
+                        // Do additional error handling or actions here
+                    
+                        // Even if the bash script fails, continue the job execution
+                        // You can add additional build steps here
+                    }
+                }
+
                 sh(
                     label: 'env list ',
                     script: "micromamba.exe env list"
@@ -195,25 +217,17 @@ try {
                     script: "micromamba.exe --version"
                 )                
                 sh(
-                    label: 'version conda.bat ',
-                    script: "conda.bat info"
-                )                
-                sh(
-                    label: 'version ',
-                    script: "conda.bat info"
-                )                
-                sh(
-                    label: 'shell version ',
-                    script: "which $SHELL"
-                )                
-                sh(
                     label: 'conda ls',
                     script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\"
                 )              
                 sh(
                     label: 'conda ls',
-                    script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat info"
-                )              
+                    script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\"
+                )
+                //sh(
+                //    label: 'conda ls',
+                //    script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat info"
+                //)  
             }
 
 
