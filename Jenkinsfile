@@ -186,17 +186,44 @@ try {
 
             String mambaRoot = "C:/Users/jenkins/micromamba/"
             String condaRoot = "C:/Users/jenkins/Miniconda3/"
-
             String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
             String envPrefix = "org.knime.python2.envconfigs/envconfigs/windows"
+
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = "${condaRoot}"
+                MAMBA_ROOT="${mambaRoot}"
+                CONDA_ROOT="${condaRoot}"
+                CONDA_BAT="${condaBat}"
+                ENV_PREFIX="${envPrefix}"
             }
             /*
             stage('Prepare Windows') {
                 env.lastStage = env.STAGE_NAME
                 checkout scm
+            environment { // necessary for Scripts\wheel.exe
+                MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\'
+            }
 
+            for (pyEnv in PYTHON_WIN_64_ENV) {
+                stage("Windows ${pyEnv}") {
+                    sh(
+                        label: 'conda build',
+                        script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe env create \
+                            -p ${rootPrefix}\\${pyEnv} \
+                            -f ${mambaPrefix}\\\\${pyEnv}.yml \
+                            -r ${rootPrefix} \
+                            --json --yes"
+                    )
+                    sh(
+                        label: 'micromamba build',
+                        script: "micromamba.exe env create  \
+                            -p ${rootPrefix}\\${pyEnv} \
+                            -f ${mambaPrefix}\\\\${pyEnv}.yml \
+                            -r ${rootPrefix} \
+                            --json --yes"
+                    )
+                }
+            }
                 sh(
                     label: 'micromamba ls',
                     script: "ls ${mambaRoot}"
@@ -217,12 +244,11 @@ try {
                 stage("micromamba ${pyEnv} ") {
                     script {
                         // Execute the bash script
-                        def exitCode = sh(returnStatus: true, script: "
-                            micromamba.exe create  \
+                        def exitCode = sh(returnStatus: true, script: "micromamba.exe create  \
                             -f ${envPrefix}/${pyEnv}.yml \
                             -p ${condaRoot} \
-                            --json --yes
-                        ")
+                            --json --yes"
+                        )
                         
                         if (exitCode != 0) {
                             println "Bash script failed with exit code: ${exitCode}"
