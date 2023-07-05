@@ -177,7 +177,7 @@ try {
 
     // windows
     OSCONDABUILD["win-64"] = {
-        node('windows && workflow-tests ') {
+        node('windows && workflow-tests && python3') {
 
             // String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
 
@@ -215,10 +215,10 @@ try {
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
                     /*
-                sh(
-                    label: 'micromamba info',
-                    script: "micromamba.exe install wheel -c conda-forge"
-                )
+                    sh(
+                        label: 'micromamba info',
+                        script: "micromamba.exe install wheel -c conda-forge"
+                    )
                     sh(
                         label: 'conda build',
                         script: "${condaBat} env create \
