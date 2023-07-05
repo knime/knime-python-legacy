@@ -182,11 +182,16 @@ try {
             // String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
 
             
-            String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
-            String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
-            String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
-            String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
+            //String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
+            //String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+            //String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
 
+            String mambaRoot = "C:/Users/jenkins/micromamba/"
+            String condaRoot = "C:/Users/jenkins/Miniconda3/"
+
+            String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
+            String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
+            String envPrefix = "org.knime.python2.envconfigs/envconfigs/windows"
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = "${condaRoot}"
                 // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
@@ -232,7 +237,7 @@ try {
                     sh(
                         label: 'micromamba build',
                         script: "micromamba.exe create  \
-                            -f ${envPrefix}\\\\${pyEnv}.yml \
+                            -f ${envPrefix}/${pyEnv}.yml \
                             -p ${condaRoot} \
                             --json --yes"
                     )
