@@ -184,7 +184,7 @@ try {
             String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
 
             environment { // necessary for Scripts\wheel.exe
-                MAMBA_ROOT_PREFIX = "${rootPrefix}"
+                MAMBA_ROOT_PREFIX = "${mambaRoot}"
                 // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
             }
 
