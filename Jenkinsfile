@@ -182,10 +182,18 @@ try {
             // String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
             String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
             String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
-            String envLocation = "${env.WORKSPACE.replaceAll('/', '%2F')}\\\\envs"
+            String envLocation = {env.WORKSPACE}.replaceAll('/', '%2F')
             String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
             // String condaRoot = "C:/Users/jenkins/Miniconda3/"
 
+            sh(
+                label: 'list WORKSPACE ',
+                script: "${env.WORKSPACE} env list"
+            )
+            sh(
+                label: 'list WORKSPACE ',
+                script: "${env.WORKSPACE.replaceAll('/', '%2F')} env list"
+            )
             /*
             String mambaRoot = "C:/Users/jenkins/micromamba/"
             String condaRoot = "C:/Users/jenkins/Miniconda3/"
