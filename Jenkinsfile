@@ -179,7 +179,7 @@ try {
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
 
             environment { // necessary for Scripts\wheel.exe
-                MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\'
+                MAMBA_ROOT_PREFIX = 'C:/Users/jenkins/Miniconda3/'
                 // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
             }
 
@@ -206,25 +206,11 @@ try {
                         // You can add additional build steps here
                     }
                 }
-                script {
-                    // Execute the bash script
-                    def exitCode = sh(returnStatus: true, script: '''
-                        # Your bash script commands here
-                        # ...
-                        # Return an exit code based on success or failure
-                        C:\\Users\\jenkins\\Miniconda3\\condabin\\conda.bat info
-                    ''')
-                    
-                    // Check the exit code and handle accordingly
-                    if (exitCode != 0) {
-                        // Print a message to indicate the failure
-                        println "Bash script failed with exit code: ${exitCode}"
-                        // Do additional error handling or actions here
-                    
-                        // Even if the bash script fails, continue the job execution
-                        // You can add additional build steps here
-                    }
-                }
+                
+                sh( 
+                    label: 'conda info',
+                    script: "C:/Users/jenkins/Miniconda3/condabin/conda.bat info"
+                )
                 sh(
                     label: 'env list ',
                     script: "micromamba.exe env list"
@@ -232,19 +218,7 @@ try {
                 sh(
                     label: 'micromamba version ',
                     script: "micromamba.exe --version"
-                )                
-                sh(
-                    label: 'conda ls',
-                    script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\"
-                )              
-                sh(
-                    label: 'conda ls',
-                    script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\"
                 )
-                //sh(
-                //    label: 'conda ls',
-                //    script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat info"
-                //)  
             }
 
 
