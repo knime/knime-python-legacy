@@ -231,9 +231,9 @@ try {
                     */
                     sh(
                         label: 'micromamba build',
-                        script: "micromamba.exe env create  \
+                        script: "micromamba.exe create  \
                             -f ${envPrefix}\\\\${pyEnv}.yml \
-                            -p ${mambaRoot} \
+                            -p ${condaRoot} \
                             --json --yes"
                     )
                 }
