@@ -179,9 +179,7 @@ try {
     OSCONDABUILD["win-64"] = {
         node('windows && workflow-tests && python3') {
 
-            // String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
-
-            
+            //String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
             //String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
             //String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
             //String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
@@ -193,7 +191,6 @@ try {
             String envPrefix = "org.knime.python2.envconfigs/envconfigs/windows"
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = "${condaRoot}"
-                // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
             }
             /*
             stage('Prepare Windows') {
@@ -217,34 +214,49 @@ try {
             */
 
             for (pyEnv in PYTHON_WIN_64_ENV) {
-                stage("Windows ${pyEnv}") {
-                    /*
-                    sh(
-                        label: 'micromamba info',
-                        script: "micromamba.exe install wheel -c conda-forge"
-                    )
-                    sh(
-                        label: 'conda build',
-                        script: "${condaBat} env create \
+                stage("micromamba ${pyEnv} ") {
+                    script {
+                        // Execute the bash script
+                        def exitCode = sh(returnStatus: true, script: "
+                            micromamba.exe create  \
+                            -f ${envPrefix}/${pyEnv}.yml \
+                            -p ${condaRoot} \
+                            --json --yes
+                        ")
+                        
+                        if (exitCode != 0) {
+                            println "Bash script failed with exit code: ${exitCode}"
+                            unstable("Unstable Mamba")
+                        }
+                    }
+                }
+                                
+                stage("conda ${pyEnv} ") {
+                    script {
+                        // Execute the bash script
+                        def exitCode = sh(returnStatus: true, script: "${condaBat} env create \
                             -p ${condaRoot}\\${pyEnv} \
                             -f ${envPrefix}\\\\${pyEnv}.yml \
                             -q \
                             -d \
-                            --json --force"
-                    )
-                    */
-                    sh(
-                        label: 'micromamba build',
-                        script: "micromamba.exe create  \
-                            -f ${envPrefix}/${pyEnv}.yml \
-                            -p ${condaRoot} \
-                            --json --yes"
-                    )
+                            --json --force")
+                        
+                        if (exitCode != 0) {
+                            println "Bash script failed with exit code: ${exitCode}"
+                            unstable("Unstable Conda")
+
+                        }
+                    }
                 }
             }
+            stage(("List Envs"))
             sh(
                 label: 'list environment ',
                 script: "micromamba.exe env list"
+            )
+            sh(
+                label: 'list environment ',
+                script: "${condaBat} env list"
             )
         }
     }
