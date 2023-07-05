@@ -177,12 +177,12 @@ try {
 
     // windows
     OSCONDABUILD["win-64"] = {
-        node('windows && workflow-tests') {
+        node('windows && workflow-tests & python3') {
 
             // String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
             String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
             String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
-            String envLocation = {env.WORKSPACE}.replaceAll('/', '%2F')
+            String envLocation = env.WORKSPACE.replaceAll('/', '%2F')
             String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
             // String condaRoot = "C:/Users/jenkins/Miniconda3/"
 
