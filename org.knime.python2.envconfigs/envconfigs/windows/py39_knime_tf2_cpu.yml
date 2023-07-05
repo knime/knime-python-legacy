@@ -3,6 +3,7 @@ channels:                # Repositories to search for packages
 - conda-forge
 - nodefaults
 dependencies:            # List of packages that should be installed
+- wheel
 - python=3.9             # Python
 - py4j                   # used for KNIME <-> Python communication
 - nomkl                  # Prevents the use of Intel's MKL
