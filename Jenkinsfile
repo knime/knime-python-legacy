@@ -179,10 +179,10 @@ try {
     OSCONDABUILD["win-64"] = {
         node('windows && workflow-tests') {
 
-            String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
             String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
             String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
             String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
+            String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
 
             /*
             String mambaRoot = "C:/Users/jenkins/micromamba/"
@@ -247,7 +247,7 @@ try {
                     script {
                         // Execute the bash script
                         def exitCode = sh(returnStatus: true, script: "micromamba.exe create  \
-                            -f ${envPrefix}\\${pyEnv}.yml \
+                            -f ${envPrefix}\\\\${pyEnv}.yml \
                             -p ${condaRoot} \
                             --json --yes"
                         )
@@ -263,7 +263,7 @@ try {
                     script {
                         // Execute the bash script
                         def exitCode = sh(returnStatus: true, script: "${condaBat} env create \
-                            -p ${condaRoot}\\${pyEnv} \
+                            -p ${condaRoot}\\\\${pyEnv} \
                             -f ${envPrefix}\\\\${pyEnv}.yml \
                             -q \
                             -d \
