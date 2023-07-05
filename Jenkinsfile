@@ -69,10 +69,14 @@ static final String[] PYTHON_WIN_64_ENV = [
 
 try {
 
+
     def OSCONDABUILD = [:]
 
-    // linux-64
     /*
+
+
+    // linux-64
+        
     OSCONDABUILD["linux-64"] = {
         node('ubuntu22.04 && workflow-tests') {
             stage('Prepare Linux') {
@@ -247,6 +251,7 @@ try {
                         label: 'micromamba build',
                         script: "micromamba.exe env create  \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
+                            -p ${rootPrefix} \
                             --json --yes"
                     )
                 }
