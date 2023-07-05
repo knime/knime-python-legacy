@@ -274,12 +274,8 @@ try {
                 stage("conda ${pyEnv} ") {
                     script {
                         // Execute the bash script
-                        def exitCode = sh(returnStatus: true, script: "${condaBat} env create \
-                            -p ${condaRoot}\\\\${pyEnv} \
-                            -f ${envPrefix}\\${pyEnv}.yml \ 
-                            -q \
-                            -d \
-                            --json --force")
+                        def exitCode = sh(returnStatus: true, script: "${condaBat} env create -p ${condaRoot}\\\\${pyEnv} \
+                            -f ${envPrefix}\\\\${pyEnv}.yml -q -d --json --force")
                         
                         if (exitCode != 0) {
                             println "Bash script failed with exit code: ${exitCode}"
