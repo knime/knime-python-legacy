@@ -179,7 +179,7 @@ try {
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
 
             environment { // necessary for Scripts\wheel.exe
-                MAMBA_ROOT_PREFIX = 'C:/Users/jenkins/Miniconda3/'
+                MAMBA_ROOT_PREFIX = 'C:/Users/jenkins/Miniconda3/Scripts/'
                 // PATH="%PATH%:C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\Scripts\\\\conda.exe"
             }
 
@@ -193,9 +193,12 @@ try {
                         # Your bash script commands here
                         # ...
                         # Return an exit code based on success or failure
-                        C:/Users/jenkins/Miniconda3/condabin/conda.bat info
+                        #C:/Users/jenkins/Miniconda3/condabin/conda.bat info
+                        echo $SHELL 
+                        echo %PATH%
+                        micromamba.exe
                     ''')
-                    
+
                     // Check the exit code and handle accordingly
                     if (exitCode != 0) {
                         // Print a message to indicate the failure
@@ -235,12 +238,12 @@ try {
                             --json --force"
                     )
                 */
+                
                     sh(
                         label: 'micromamba build',
                         script: "micromamba.exe env create  \
-                            -p ${rootPrefix}\\${pyEnv} \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
-                            --json --yes"
+                            --json --yes --dry"
                     )
                 }
             }
