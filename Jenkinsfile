@@ -182,7 +182,9 @@ try {
             // String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
             String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
             String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
+            String envLocation = "${env.WORKSPACE}\\\\envs"
             String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
+            // String condaRoot = "C:/Users/jenkins/Miniconda3/"
 
             /*
             String mambaRoot = "C:/Users/jenkins/micromamba/"
@@ -276,8 +278,8 @@ try {
                 stage("conda ${pyEnv} ") {
                     script {
                         // Execute the bash script
-                        def exitCode = sh(returnStatus: true, script: "${condaBat} env create -p ${condaRoot}\\\\${pyEnv} \
-                            -f ${envPrefix}\\\\${pyEnv}.yml -q -d --json --force")
+                        def exitCode = sh(returnStatus: true, script: "${condaBat} env create -p ${envLocation}\\\\${pyEnv} \
+                            -f ${envPrefix}\\${pyEnv}.yml -r ${condaRoot} -q -d --json --force")
                         
                         if (exitCode != 0) {
                             println "Bash script failed with exit code: ${exitCode}"
