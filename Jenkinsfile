@@ -197,8 +197,8 @@ try {
                     script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\"
                 )              
                 sh(
-                    label: 'conda info',
-                    script: "conda.exe info"
+                    label: 'conda ls',
+                    script: "ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat info"
                 )              
             }
 
