@@ -224,6 +224,7 @@ try {
 
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
+                /*
                     sh( // C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat
                         label: 'conda build',
                         script: "C:/Users/jenkins/Miniconda3/condabin/conda.bat env create \
@@ -233,12 +234,12 @@ try {
                             -d \
                             --json --force"
                     )
+                */
                     sh(
                         label: 'micromamba build',
                         script: "micromamba.exe env create  \
                             -p ${rootPrefix}\\${pyEnv} \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
-                            -r ${rootPrefix} \
                             --json --yes"
                     )
                 }
