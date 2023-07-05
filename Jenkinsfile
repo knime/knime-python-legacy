@@ -177,7 +177,7 @@ try {
 
     // windows
     OSCONDABUILD["win-64"] = {
-        node('windows && workflow-tests & python3') {
+        node('windows && workflow-tests && python3') {
 
             // String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
             String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
