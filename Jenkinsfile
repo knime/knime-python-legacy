@@ -256,7 +256,9 @@ try {
                             -p ${rootPrefix}\\${pyEnv} \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
                             -r ${rootPrefix} \
-                            --json --yes"
+                            -q \
+                            -d \
+                            --json --force"
                     )
                     sh(
                         label: 'micromamba build',
