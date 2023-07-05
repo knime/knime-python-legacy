@@ -177,7 +177,7 @@ try {
 
     // windows
     OSCONDABUILD["win-64"] = {
-        node('windows && workflow-tests && python3') {
+        node('windows && workflow-tests') {
 
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
             String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
@@ -190,7 +190,7 @@ try {
             String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
             String envPrefix = "org.knime.python2.envconfigs/envconfigs/windows"
             */
-            
+
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = "${condaRoot}"
                 MAMBA_ROOT="${mambaRoot}"
@@ -247,7 +247,7 @@ try {
                     script {
                         // Execute the bash script
                         def exitCode = sh(returnStatus: true, script: "micromamba.exe create  \
-                            -f ${envPrefix}/${pyEnv}.yml \
+                            -f ${envPrefix}\\${pyEnv}.yml \
                             -p ${condaRoot} \
                             --json --yes"
                         )
