@@ -246,6 +246,63 @@ try {
                         // You can add additional build steps here
                     }
                 }
+                script {
+                    // Execute the bash script
+                    def exitCode = sh(returnStatus: true, script: '''
+                        # Your bash script commands here
+                        # ...
+                        # Return an exit code based on success or failure
+                        C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat
+                    ''')
+                    
+                    // Check the exit code and handle accordingly
+                    if (exitCode != 0) {
+                        // Print a message to indicate the failure
+                        println "Bash script failed with exit code: ${exitCode}"
+                        // Do additional error handling or actions here
+                    
+                        // Even if the bash script fails, continue the job execution
+                        // You can add additional build steps here
+                    }
+                }
+                script {
+                    // Execute the bash script
+                    def exitCode = sh(returnStatus: true, script: '''
+                        # Your bash script commands here
+                        # ...
+                        # Return an exit code based on success or failure
+                        \\C:/Users/jenkins/Miniconda3/condabin/conda.bat info
+                    ''')
+                    
+                    // Check the exit code and handle accordingly
+                    if (exitCode != 0) {
+                        // Print a message to indicate the failure
+                        println "Bash script failed with exit code: ${exitCode}"
+                        // Do additional error handling or actions here
+                    
+                        // Even if the bash script fails, continue the job execution
+                        // You can add additional build steps here
+                    }
+                }
+                script {
+                    // Execute the bash script
+                    def exitCode = sh(returnStatus: true, script: '''
+                        # Your bash script commands here
+                        # ...
+                        # Return an exit code based on success or failure
+                        C:/Users/jenkins/Miniconda3/condabin/conda.bat info
+                    ''')
+                    
+                    // Check the exit code and handle accordingly
+                    if (exitCode != 0) {
+                        // Print a message to indicate the failure
+                        println "Bash script failed with exit code: ${exitCode}"
+                        // Do additional error handling or actions here
+                    
+                        // Even if the bash script fails, continue the job execution
+                        // You can add additional build steps here
+                    }
+                }
                 sh(
                     label: 'env list ',
                     script: "micromamba.exe env list"
