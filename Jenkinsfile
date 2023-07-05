@@ -264,7 +264,7 @@ try {
                         // Execute the bash script
                         def exitCode = sh(returnStatus: true, script: "${condaBat} env create \
                             -p ${condaRoot}\\\\${pyEnv} \
-                            -f ${envPrefix}\\\\${pyEnv}.yml \
+                            -f ${envPrefix}\\${pyEnv}.yml \
                             -q \
                             -d \
                             --json --force")
