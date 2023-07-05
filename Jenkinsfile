@@ -179,16 +179,18 @@ try {
     OSCONDABUILD["win-64"] = {
         node('windows && workflow-tests && python3') {
 
-            //String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
-            //String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
-            //String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
-            //String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
+            String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+            String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
+            String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+            String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
 
+            /*
             String mambaRoot = "C:/Users/jenkins/micromamba/"
             String condaRoot = "C:/Users/jenkins/Miniconda3/"
             String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
             String envPrefix = "org.knime.python2.envconfigs/envconfigs/windows"
-
+            */
+            
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = "${condaRoot}"
                 MAMBA_ROOT="${mambaRoot}"
