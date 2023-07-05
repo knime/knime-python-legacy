@@ -20,6 +20,7 @@ dependencies:            # List of packages that should be installed
 - protobuf>3.12          # Lower protobuf versions do not work with TensorFlow 2
 - libiconv               # MDF Reader node
 - asammdf=5.19.14        # MDF Reader node
+- urllib3=1.26.16        # required in pip 
 - pip
 - pip:
   - tensorflow>=2,<=2.7
