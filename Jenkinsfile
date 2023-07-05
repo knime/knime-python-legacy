@@ -206,6 +206,18 @@ try {
                 MAMBA_ROOT_PREFIX = 'C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\'
             }
 
+
+            String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
+            String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+                        label: 'micromamba build',
+                        script: "micromamba.exe env create  \
+                            -p ${rootPrefix}\\${pyEnv} \
+                            -f ${mambaPrefix}\\\\${pyEnv}.yml \
+                            -r ${rootPrefix} \
+                            --json --yes"
+
+
+
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
                     sh(
@@ -246,7 +258,7 @@ try {
                 stage("micromamba ${pyEnv} ") {
                     script {
                         // Execute the bash script
-                        def exitCode = sh(returnStatus: true, script: "micromamba.exe create  \
+                        def exitCode = sh(returnStatus: true, script: "micromamba.exe env create  \
                             -f ${envPrefix}\\\\${pyEnv}.yml \
                             -p ${condaRoot} \
                             --json --yes"
@@ -264,7 +276,7 @@ try {
                         // Execute the bash script
                         def exitCode = sh(returnStatus: true, script: "${condaBat} env create \
                             -p ${condaRoot}\\\\${pyEnv} \
-                            -f ${envPrefix}\\${pyEnv}.yml \
+                            -f ${envPrefix}\\${pyEnv}.yml \ 
                             -q \
                             -d \
                             --json --force")
