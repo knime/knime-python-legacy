@@ -247,7 +247,6 @@ try {
                         label: 'micromamba build',
                         script: "micromamba.exe env create  \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
-                            -p ${rootPrefix} \
                             --json --yes"
                     )
                 }
