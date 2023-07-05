@@ -122,6 +122,7 @@ try {
     */
 
     // osx-64
+    /*
     OSCONDABUILD["osx-64"] = {
         node('macosx && workflow-tests && python3' ) {
 
@@ -168,6 +169,7 @@ try {
             )        
         }
     }
+    */
 
     // windows
     OSCONDABUILD["win-64"] = {
@@ -191,6 +193,18 @@ try {
                 sh(
                     label: 'micromamba version ',
                     script: "micromamba.exe --version"
+                )                
+                sh(
+                    label: 'shell version ',
+                    script: "which $SHELL"
+                )                
+                sh(
+                    label: 'version conda.bat ',
+                    script: "conda.bat info",
+                )                
+                sh(
+                    label: 'version ',
+                    script: "conda.bat info",
                 )                
                 sh(
                     label: 'conda ls',
