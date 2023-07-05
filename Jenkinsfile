@@ -255,7 +255,6 @@ try {
                         script: "C:/Users/jenkins/Miniconda3/condabin/conda.bat env create \
                             -p ${rootPrefix}\\${pyEnv} \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
-                            -r ${rootPrefix} \
                             -q \
                             -d \
                             --json --force"
