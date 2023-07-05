@@ -179,9 +179,13 @@ try {
     OSCONDABUILD["win-64"] = {
         node('windows && workflow-tests ') {
 
-            String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
-            String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+            // String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+
+            
             String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
+            String condaRoot = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+            String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
+            String envPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
 
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = "${mambaRoot}"
@@ -192,33 +196,18 @@ try {
                 env.lastStage = env.STAGE_NAME
                 checkout scm
 
+                /* 
                 script {
                     // Execute the bash script
                     def exitCode = sh(returnStatus: true, script: '''
-                        # Your bash script commands here
-                        # ...
-                        # Return an exit code based on success or failure
                         echo $SHELL 
                         echo $PATH
-                        micromamba.exe
-
                     ''')
 
-                    // Check the exit code and handle accordingly
                     if (exitCode != 0) {
-                        // Print a message to indicate the failure
-                        println "Bash script failed with exit code: ${exitCode}"
-                        // Do additional error handling or actions here
-                    
-                        // Even if the bash script fails, continue the job execution
-                        // You can add additional build steps here
+                        println "Exit code: ${exitCode}"
                     }
                 }
-                
-                sh( 
-                    label: 'conda info',
-                    script: "C:/Users/jenkins/Miniconda3/condabin/conda.bat info"
-                )
                 sh(
                     label: 'env list ',
                     script: "micromamba.exe clean --all --yes"
@@ -227,13 +216,14 @@ try {
                     label: 'micromamba version ',
                     script: "micromamba.exe --version"
                 )
+                */
                 sh(
                     label: 'micromamba info',
                     script: "micromamba.exe info"
                 )
                 sh( 
-                    label: 'mamba ls',
-                    script: "ls ${mambaRoot}"
+                    label: 'conda info',
+                    script:  "${condaBat} info"
                 )
             }
 
@@ -241,11 +231,11 @@ try {
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
                     /*
-                    sh( // C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat
+                    sh(
                         label: 'conda build',
-                        script: "C:/Users/jenkins/Miniconda3/condabin/conda.bat env create \
-                            -p ${rootPrefix}\\${pyEnv} \
-                            -f ${mambaPrefix}\\\\${pyEnv}.yml \
+                        script: "${condaBat} env create \
+                            -p ${condaRoot}\\${pyEnv} \
+                            -f ${envPrefix}\\\\${pyEnv}.yml \
                             -q \
                             -d \
                             --json --force"
@@ -254,7 +244,7 @@ try {
                     sh(
                         label: 'micromamba build',
                         script: "micromamba.exe env create  \
-                            -f ${mambaPrefix}\\\\${pyEnv}.yml \
+                            -f ${envPrefix}\\\\${pyEnv}.yml \
                             -p ${mambaRoot} \
                             --json --yes"
                     )
