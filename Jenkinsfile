@@ -181,6 +181,7 @@ try {
 
             String mambaPrefix = "org.knime.python2.envconfigs\\\\envconfigs\\\\windows"
             String rootPrefix = "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\"
+            String mambaRoot = "C:\\\\Users\\\\jenkins\\\\micromamba"
 
             environment { // necessary for Scripts\wheel.exe
                 MAMBA_ROOT_PREFIX = "${rootPrefix}"
@@ -230,12 +231,16 @@ try {
                     label: 'micromamba info',
                     script: "micromamba.exe info"
                 )
+                sh( 
+                    label: 'mamba ls',
+                    script: "ls ${mambaRoot}"
+                )
             }
 
 
             for (pyEnv in PYTHON_WIN_64_ENV) {
                 stage("Windows ${pyEnv}") {
-                /*
+                    /*
                     sh( // C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat
                         label: 'conda build',
                         script: "C:/Users/jenkins/Miniconda3/condabin/conda.bat env create \
@@ -245,13 +250,12 @@ try {
                             -d \
                             --json --force"
                     )
-                */
-                
+                    */
                     sh(
                         label: 'micromamba build',
                         script: "micromamba.exe env create  \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
-                            -p ${rootPrefix} \
+                            -p ${mambaRoot} \
                             --json --yes"
                     )
                 }
