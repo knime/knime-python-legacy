@@ -1,0 +1,1 @@
+urllib3 v1 is not available in conda-forge 
