@@ -187,103 +187,6 @@ try {
                 env.lastStage = env.STAGE_NAME
                 checkout scm
 
-                // --->>
-                script {
-                    // Execute the bash script
-                    def exitCode = sh(returnStatus: true, script: '''
-                        # Your bash script commands here
-                        # ...
-                        # Return an exit code based on success or failure
-                        conda.exe info
-                    ''')
-                    
-                    // Check the exit code and handle accordingly
-                    if (exitCode != 0) {
-                        // Print a message to indicate the failure
-                        println "Bash script failed with exit code: ${exitCode}"
-                        // Do additional error handling or actions here
-                    
-                        // Even if the bash script fails, continue the job execution
-                        // You can add additional build steps here
-                    }
-                }
-                
-                script {
-                    // Execute the bash script
-                    def exitCode = sh(returnStatus: true, script: '''
-                        # Your bash script commands here
-                        # ...
-                        # Return an exit code based on success or failure
-                        conda.bat info
-                    ''')
-                    
-                    // Check the exit code and handle accordingly
-                    if (exitCode != 0) {
-                        // Print a message to indicate the failure
-                        println "Bash script failed with exit code: ${exitCode}"
-                        // Do additional error handling or actions here
-                    
-                        // Even if the bash script fails, continue the job execution
-                        // You can add additional build steps here
-                    }
-                }
-                script {
-                    // Execute the bash script
-                    def exitCode = sh(returnStatus: true, script: '''
-                        # Your bash script commands here
-                        # ...
-                        # Return an exit code based on success or failure
-                        ls C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\
-                    ''')
-                    
-                    // Check the exit code and handle accordingly
-                    if (exitCode != 0) {
-                        // Print a message to indicate the failure
-                        println "Bash script failed with exit code: ${exitCode}"
-                        // Do additional error handling or actions here
-                    
-                        // Even if the bash script fails, continue the job execution
-                        // You can add additional build steps here
-                    }
-                }
-                script {
-                    // Execute the bash script
-                    def exitCode = sh(returnStatus: true, script: '''
-                        # Your bash script commands here
-                        # ...
-                        # Return an exit code based on success or failure
-                        C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat
-                    ''')
-                    
-                    // Check the exit code and handle accordingly
-                    if (exitCode != 0) {
-                        // Print a message to indicate the failure
-                        println "Bash script failed with exit code: ${exitCode}"
-                        // Do additional error handling or actions here
-                    
-                        // Even if the bash script fails, continue the job execution
-                        // You can add additional build steps here
-                    }
-                }
-                script {
-                    // Execute the bash script
-                    def exitCode = sh(returnStatus: true, script: '''
-                        # Your bash script commands here
-                        # ...
-                        # Return an exit code based on success or failure
-                        \\C:/Users/jenkins/Miniconda3/condabin/conda.bat info
-                    ''')
-                    
-                    // Check the exit code and handle accordingly
-                    if (exitCode != 0) {
-                        // Print a message to indicate the failure
-                        println "Bash script failed with exit code: ${exitCode}"
-                        // Do additional error handling or actions here
-                    
-                        // Even if the bash script fails, continue the job execution
-                        // You can add additional build steps here
-                    }
-                }
                 script {
                     // Execute the bash script
                     def exitCode = sh(returnStatus: true, script: '''
@@ -291,6 +194,25 @@ try {
                         # ...
                         # Return an exit code based on success or failure
                         C:/Users/jenkins/Miniconda3/condabin/conda.bat info
+                    ''')
+                    
+                    // Check the exit code and handle accordingly
+                    if (exitCode != 0) {
+                        // Print a message to indicate the failure
+                        println "Bash script failed with exit code: ${exitCode}"
+                        // Do additional error handling or actions here
+                    
+                        // Even if the bash script fails, continue the job execution
+                        // You can add additional build steps here
+                    }
+                }
+                script {
+                    // Execute the bash script
+                    def exitCode = sh(returnStatus: true, script: '''
+                        # Your bash script commands here
+                        # ...
+                        # Return an exit code based on success or failure
+                        C:\\Users\\jenkins\\Miniconda3\\condabin\\conda.bat info
                     ''')
                     
                     // Check the exit code and handle accordingly
@@ -330,7 +252,7 @@ try {
                 stage("Windows ${pyEnv}") {
                     sh( // C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat
                         label: 'conda build',
-                        script: "C:\\\\Users\\\\jenkins\\\\Miniconda3\\\\condabin\\\\conda.bat env create \
+                        script: "C:/Users/jenkins/Miniconda3/condabin/conda.bat env create \
                             -p ${rootPrefix}\\${pyEnv} \
                             -f ${mambaPrefix}\\\\${pyEnv}.yml \
                             -r ${rootPrefix} \
