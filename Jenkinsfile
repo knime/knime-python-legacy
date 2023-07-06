@@ -33,6 +33,20 @@ static final String[] PYTHON_MAC_64_ENV = [
     'py38_knime',
     'py39_knime_tf2_cpu',
     'py39_knime'
+/*
+*  Linux Enviroments
+*/
+@groovy.transform.Field
+static final String[] PYTHON_LINUX_ENV = [
+    'py27_knime',
+    'py36_knime_dl_cpu',
+    'py36_knime_dl_gpu',
+    'py36_knime_tf2_cpu', 
+    'py36_knime_tf2_gpu',
+    'py38_knime',
+    'py38_knime_tf2_cpu', 
+    'py39_knime',
+    'py39_knime_tf2_cpu'
 ]
 
 try {
@@ -46,8 +60,17 @@ try {
             buildCondaEnvironmentMac(envString)
         }
     }
-    // Parallel
     parallel(MACOSCONDABUILD)
+
+    // Linux
+    def LINUXOSCONDABUILD = [:]
+    for (envFile in PYTHON_LINUX_ENV) {
+        def envString = new String(envFile)
+        LINUXOSCONDABUILD["${envString}"] = {
+            buildCondaEnvironmentLinux(envString)
+        }
+    }
+    parallel(LINUXOSCONDABUILD)
 
     def parallelConfigs = [:]
     for (py in PYTHON_VERSIONS) {
@@ -112,6 +135,39 @@ def buildCondaEnvironmentMac(String envFile) {
 /**
 * Return parameters to select python version to run workflowtests with
 */
+def buildCondaEnvironmentLinux(String envFile) {
+    node('ubuntu22.04 && python3 && workflow-tests') {
+
+        String ymlPath = "$WORKSPACE/org.knime.python2.envconfigs/envconfigs/linux"
+        stage("$envFile") {
+            env.lastStage = env.STAGE_NAME
+            checkout scm
+
+            sh(
+                label: 'Info',
+                script: """#!/bin/sh
+                    . ~/miniconda3/etc/profile.d/conda.sh
+                    conda info
+                """
+            )
+            sh(
+                label: "Install $envFile",
+                script: """#!/bin/sh
+                    . ~/miniconda3/etc/profile.d/conda.sh
+                    conda env create -f $ymlPath/${envFile}.yml -p $WORKSPACE/$envFile --quiet --json --solver=classic
+                """
+            )
+            sh(
+                label: "List $envFile",
+                script: """#!/bin/sh
+                    . ~/miniconda3/etc/profile.d/conda.sh
+                    conda list -p $WORKSPACE/$envFile
+                """
+            )
+        }
+    }
+}
+
 def getPythonParameters() {
     def pythonParams = []
     for (c in PYTHON_VERSIONS) {
