@@ -185,6 +185,21 @@ try {
             String envLocation = env.WORKSPACE.replaceAll('/', '%2F')
             String condaBat = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
             // String condaRoot = "C:/Users/jenkins/Miniconda3/"
+            script {
+                // Execute the bash script
+                def exitCode = sh(returnStatus: true, script: '''
+                echo ${envLocation}
+                echo ${env.WORKSPACE}
+                echo env.WORKSPACE
+                printenv
+                '''
+                )
+                
+                if (exitCode != 0) {
+                    println "Bash script failed with exit code: ${exitCode}"
+                    unstable("Unstable Mamba")
+                }
+            }
 
             sh(
                 label: 'list WORKSPACE ',
