@@ -187,8 +187,9 @@ try {
             // String condaRoot = "C:/Users/jenkins/Miniconda3/"
             script {
                 // Execute the bash script
-                def exitCode = sh(returnStatus: true, script: '''
+                def exitCode = sh(returnStatus: true, script: '''#!/bin/bash
                 echo ${envLocation}
+                echo $(env.WORKSPACE)
                 echo ${env.WORKSPACE}
                 echo env.WORKSPACE
                 printenv
