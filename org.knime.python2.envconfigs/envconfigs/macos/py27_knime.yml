@@ -1,11 +1,10 @@
 name: py27_knime      # Name of the created environment
 channels:             # Repositories to search for packages
-- defaults
-- anaconda
 - conda-forge
+- nodefaults
 dependencies:         # List of packages that should be installed
 - python=2.7          # Python
-- nomkl               # Prevents the use of Intel's MKL
+- nomkl=1.0             # Prevents the use of Intel's MKL
 - pandas=0.23         # Table data structures
 - jedi=0.13           # Python script autocompletion
 - parso=0.7.1         # Jedi dependency this is the last version compatible with 2.7
@@ -17,6 +16,8 @@ dependencies:         # List of packages that should be installed
 - IPython=5.8         # Notebook support
 - decorator=4.4.2     # IPython dependency this is the last version compatible with 2.7
 - nbformat=4.4        # Notebook support
-- scipy=1.1           # Notebook support
 - jpype1=0.6.3        # Databases
 - protobuf=3.5        # Serialization for deprecated Python nodes
+- pip
+- pip:
+  - scipy==1.1.*
