@@ -20,7 +20,29 @@ properties([
     disableConcurrentBuilds()
 ])
 
+/*
+*  Windows Enviroments
+*/
+@groovy.transform.Field
+static final String[] PYTHON_WIN_64_ENV = [
+    'py27_knime',
+    'py36_knime',
+    'py36_knime_dl_cpu',
+    'py36_knime_dl_gpu',
+    'py36_knime_tf2_cpu',
+    'py36_knime_tf2_gpu',
+    'py37_knime',
+    'py37_knime_dl_cpu',
+    'py38_knime',
+    'py38_knime_tf2_cpu',
+    'py39_knime_tf2_cpu',
+    'py39_knime',
+]
 
+
+/*
+*  MacOS Enviroments
+*/
 @groovy.transform.Field
 static final String[] PYTHON_MAC_64_ENV = [
     'py27_knime',
@@ -33,6 +55,8 @@ static final String[] PYTHON_MAC_64_ENV = [
     'py38_knime',
     'py39_knime_tf2_cpu',
     'py39_knime'
+]
+
 /*
 *  Linux Enviroments
 */
@@ -71,6 +95,17 @@ try {
         }
     }
     parallel(LINUXOSCONDABUILD)
+
+    // Windows
+    def WINOSCONDABUILD = [:]
+    for (envFile in PYTHON_WIN_64_ENV) {
+        def envString = new String(envFile)
+        WINOSCONDABUILD["${envString}"] = {
+            buildCondaEnvironmentWin(envString)
+        }
+    }
+    // Parallel
+    parallel(WINOSCONDABUILD)
 
     def parallelConfigs = [:]
     for (py in PYTHON_VERSIONS) {
@@ -132,9 +167,26 @@ def buildCondaEnvironmentMac(String envFile) {
     }
 }
 
-/**
-* Return parameters to select python version to run workflowtests with
-*/
+def buildCondaEnvironmentWin(String envFile) {
+    //
+    String ymlPath = "org.knime.python2.envconfigs/envconfigs/windows"
+    String condaPath = "C:/Users/jenkins/Miniconda3/condabin/conda.bat"
+
+    node('windows && workflow-tests && python3') {
+        // 
+        stage("$envFile") {
+            env.lastStage = env.STAGE_NAME
+            checkout scm
+            withEnv([
+                "ENV_FILE=$envFile",
+                "YML_PATH=$ymlPath",
+                "CONDA_PATH=$condaPath"]) {
+                sh 'sh $WORKSPACE\\\\run_conda_install.sh'
+            }
+        }
+    }
+}
+
 def buildCondaEnvironmentLinux(String envFile) {
     node('ubuntu22.04 && python3 && workflow-tests') {
 
@@ -168,6 +220,9 @@ def buildCondaEnvironmentLinux(String envFile) {
     }
 }
 
+/**
+* Return parameters to select python version to run workflowtests with
+*/
 def getPythonParameters() {
     def pythonParams = []
     for (c in PYTHON_VERSIONS) {
