@@ -52,6 +52,7 @@ import static org.knime.python2.prefs.PythonPreferenceUtils.performActionOnWidge
 
 import javax.swing.event.ChangeEvent;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -155,7 +156,7 @@ class CondaEnvironmentCreationPreferenceDialog extends Dialog implements CondaEn
         m_shell.pack();
     }
 
-    private void createContents() {
+    private void createContents() { // NOSONAR
         m_shell.setLayout(new GridLayout());
         final Label descriptionText = new Label(m_shell, SWT.WRAP);
         descriptionText.setText("This will create a new preconfigured Conda environment for "
@@ -166,6 +167,20 @@ class CondaEnvironmentCreationPreferenceDialog extends Dialog implements CondaEn
         final GridData descriptionTextGridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
         descriptionTextGridData.widthHint = DESCRIPTION_LABEL_WIDTH_HINTS;
         descriptionText.setLayoutData(descriptionTextGridData);
+
+        if (m_environmentCreator.getPythonVersion() == PythonVersion.PYTHON2 && SystemUtils.IS_OS_WINDOWS) {
+            var anacondaWarning = new Label(m_shell, SWT.WRAP);
+            anacondaWarning.setText(
+                "The preconfigured Conda environment for Python 2 requires packages from the anaconda channel. "
+                    + "These packages are covered by the Anaconda repository Terms of Service. "
+                    + "Among other things, the ToS prohibits heavy commercial use. "
+                    + "Please check if you are eligible to use the anaconda channel.");
+            anacondaWarning.setFont(JFaceResources.getFontRegistry().getBold(""));
+            anacondaWarning.setForeground(m_shell.getDisplay().getSystemColor(SWT.COLOR_RED));
+            var anacondaWarningGridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+            anacondaWarningGridData.widthHint = DESCRIPTION_LABEL_WIDTH_HINTS;
+            anacondaWarning.setLayoutData(anacondaWarningGridData);
+        }
 
         final Label separator = new Label(m_shell, SWT.SEPARATOR | SWT.HORIZONTAL);
         separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -401,7 +416,7 @@ class CondaEnvironmentCreationPreferenceDialog extends Dialog implements CondaEn
             m_shell.layout(true, true);
             m_status = new CondaEnvironmentCreationStatus();
             registerExternalHooks();
-             m_environmentCreator.startEnvironmentCreation(environmentName, pythonVersion, m_status);
+            m_environmentCreator.startEnvironmentCreation(environmentName, pythonVersion, m_status);
         } catch (final Exception ex) { // NOSONAR Exception will be lost if not caught here.
             NodeLogger.getLogger(CondaEnvironmentCreationPreferenceDialog.class).debug(ex);
             performActionOnWidgetInUiThread(m_shell, () -> {
