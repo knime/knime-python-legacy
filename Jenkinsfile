@@ -20,8 +20,34 @@ properties([
     disableConcurrentBuilds()
 ])
 
+
+@groovy.transform.Field
+static final String[] PYTHON_MAC_64_ENV = [
+    'py27_knime',
+    'py36_knime_dl_cpu',
+    'py36_knime_tf2_cpu',
+    'py36_knime',
+    'py37_knime_dl_cpu',
+    'py37_knime',
+    'py38_knime_tf2_cpu',
+    'py38_knime',
+    'py39_knime_tf2_cpu',
+    'py39_knime'
+]
+
 try {
     knimetools.defaultTychoBuild('org.knime.update.python.legacy', 'maven && python2 && python3 && java17')
+
+    // MacOS
+    def MACOSCONDABUILD = [:]
+    for (envFile in PYTHON_MAC_64_ENV) {
+        def envString = new String(envFile)
+        MACOSCONDABUILD["${envString}"] = {
+            buildCondaEnvironmentMac(envString)
+        }
+    }
+    // Parallel
+    parallel(MACOSCONDABUILD)
 
     def parallelConfigs = [:]
     for (py in PYTHON_VERSIONS) {
@@ -52,6 +78,36 @@ try {
  } finally {
      notifications.notifyBuild(currentBuild.result);
  }
+
+def buildCondaEnvironmentMac(String envFile) {
+    node('macosx && workflow-tests && python3') {
+        String ymlPath = "org.knime.python2.envconfigs/envconfigs/macos"
+
+        stage("$envFile") {
+            env.lastStage = env.STAGE_NAME
+            checkout scm
+
+            sh(
+                label: "Info",
+                script: """#!/bin/sh
+                    conda info
+                """
+            )
+            sh(
+                label: "Install $envFile",
+                script: """#!/bin/sh
+                    conda env create -f $ymlPath/${envFile}.yml -p $WORKSPACE/$envFile --quiet --json --solver=classic
+                """
+            )
+            sh(
+                label: "List $envFile",
+                script: """#!/bin/sh
+                    conda list -p $WORKSPACE/$envFile
+                """
+            )
+        }
+    }
+}
 
 /**
 * Return parameters to select python version to run workflowtests with
