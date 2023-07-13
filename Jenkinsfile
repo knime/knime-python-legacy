@@ -143,7 +143,6 @@ def runPython27WorkflowTests(String baseBranch){
                     'knime-kerberos',
                     'knime-python-legacy',
                     'knime-core-columnar',
-                    'knime-core-arrow',
                     'knime-testing-internal',
                     'knime-xml',
                     'knime-conda'
@@ -190,7 +189,6 @@ def runPython3MultiversionWorkflowTestConfig(String pythonVersion, String baseBr
                         'knime-kerberos',
                         'knime-python-legacy',
                         'knime-core-columnar',
-                        'knime-core-arrow',
                         'knime-testing-internal',
                         'knime-xml',
                         'knime-conda'
