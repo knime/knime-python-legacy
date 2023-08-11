@@ -39,7 +39,6 @@ static final String[] PYTHON_WIN_64_ENV = [
     'py39_knime',
 ]
 
-
 /*
 *  MacOS Enviroments
 */
@@ -76,36 +75,35 @@ static final String[] PYTHON_LINUX_ENV = [
 try {
     knimetools.defaultTychoBuild('org.knime.update.python.legacy', 'maven && python2 && python3 && java17')
 
-    // MacOS
-    def MACOSCONDABUILD = [:]
-    for (envFile in PYTHON_MAC_64_ENV) {
-        def envString = new String(envFile)
-        MACOSCONDABUILD["${envString}"] = {
-            buildCondaEnvironmentMac(envString)
-        }
-    }
-    parallel(MACOSCONDABUILD)
+    if (params.testEnvironmentCreation) {
+        def osBuild = [:]
 
-    // Linux
-    def LINUXOSCONDABUILD = [:]
-    for (envFile in PYTHON_LINUX_ENV) {
-        def envString = new String(envFile)
-        LINUXOSCONDABUILD["${envString}"] = {
-            buildCondaEnvironmentLinux(envString)
+        // MacOS
+        for (envFile in PYTHON_MAC_64_ENV) {
+            String envString = new String(envFile)
+            osBuild["${envString}"] = {
+                buildCondaEnvironmentMac(envString)
+            }
         }
-    }
-    parallel(LINUXOSCONDABUILD)
 
-    // Windows
-    def WINOSCONDABUILD = [:]
-    for (envFile in PYTHON_WIN_64_ENV) {
-        def envString = new String(envFile)
-        WINOSCONDABUILD["${envString}"] = {
-            buildCondaEnvironmentWin(envString)
+        // Linux
+        for (envFile in PYTHON_LINUX_ENV) {
+            String envString = new String(envFile)
+            osBuild["${envString}"] = {
+                buildCondaEnvironmentLinux(envString)
+            }
         }
+
+        // Windows
+        for (envFile in PYTHON_WIN_64_ENV) {
+            String envString = new String(envFile)
+            osBuild["${envString}"] = {
+                buildCondaEnvironmentWin(envString)
+            }
+        }
+        // run all in parallel
+        parallel(osBuild)
     }
-    // Parallel
-    parallel(WINOSCONDABUILD)
 
     def parallelConfigs = [:]
     for (py in PYTHON_VERSIONS) {
@@ -228,6 +226,7 @@ def getPythonParameters() {
     for (c in PYTHON_VERSIONS) {
         pythonParams += booleanParam(defaultValue: c == DEFAULT_PYTHON_VERSION, description: "Run workflowtests with Python ${c}", name: c)
     }
+    pythonParams += booleanParam(defaultValue: false, description: "Test Conda Environment creation on all OS", name: "testEnvironmentCreation")
     return pythonParams
 }
 
