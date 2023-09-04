@@ -115,6 +115,7 @@ try {
     // }
 
     // legacy tests
+    def parallelConfigs = [:]
     parallelConfigs["Python 2.7"] = {
         runPython27WorkflowTests(baseBranch)
     }
