@@ -241,7 +241,9 @@ def runPython27WorkflowTests(String baseBranch){
                 repositories: [
                     'knime-chemistry',
                     'knime-python',
+                    'knime-credentials-base',
                     'knime-database',
+                    'knime-gateway',
                     'knime-office365',
                     'knime-datageneration',
                     'knime-distance',
