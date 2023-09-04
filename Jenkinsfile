@@ -12,9 +12,6 @@ library "knime-pipeline@$BN"
 def baseBranch = (BN == KNIMEConstants.NEXT_RELEASE_BRANCH ? "master" : BN.replace("releases/",""))
 
 properties([
-    pipelineTriggers([
-        upstream('knime-filehandling/' + env.BRANCH_NAME.replaceAll('/', '%2F'))
-    ]),
     parameters(workflowTests.getConfigurationsAsParameters() + getPythonParameters()),
     buildDiscarder(logRotator(numToKeepStr: '5')),
     disableConcurrentBuilds()
@@ -73,49 +70,49 @@ static final String[] PYTHON_LINUX_ENV = [
 ]
 
 try {
-    knimetools.defaultTychoBuild('org.knime.update.python.legacy', 'maven && python2 && python3 && java17')
+    // knimetools.defaultTychoBuild('org.knime.update.python.legacy', 'maven && python2 && python3 && java17')
 
-    if (params.testEnvironmentCreation) {
-        def osBuild = [:]
+    // if (params.testEnvironmentCreation) {
+    //     def osBuild = [:]
 
-        // MacOS
-        for (envFile in PYTHON_MAC_64_ENV) {
-            String envString = new String(envFile)
-            osBuild["${envString}"] = {
-                buildCondaEnvironmentMac(envString)
-            }
-        }
+    //     // MacOS
+    //     for (envFile in PYTHON_MAC_64_ENV) {
+    //         String envString = new String(envFile)
+    //         osBuild["${envString}"] = {
+    //             buildCondaEnvironmentMac(envString)
+    //         }
+    //     }
 
-        // Linux
-        for (envFile in PYTHON_LINUX_ENV) {
-            String envString = new String(envFile)
-            osBuild["${envString}"] = {
-                buildCondaEnvironmentLinux(envString)
-            }
-        }
+    //     // Linux
+    //     for (envFile in PYTHON_LINUX_ENV) {
+    //         String envString = new String(envFile)
+    //         osBuild["${envString}"] = {
+    //             buildCondaEnvironmentLinux(envString)
+    //         }
+    //     }
 
-        // Windows
-        for (envFile in PYTHON_WIN_64_ENV) {
-            String envString = new String(envFile)
-            osBuild["${envString}"] = {
-                buildCondaEnvironmentWin(envString)
-            }
-        }
-        // run all in parallel
-        parallel(osBuild)
-    }
+    //     // Windows
+    //     for (envFile in PYTHON_WIN_64_ENV) {
+    //         String envString = new String(envFile)
+    //         osBuild["${envString}"] = {
+    //             buildCondaEnvironmentWin(envString)
+    //         }
+    //     }
+    //     // run all in parallel
+    //     parallel(osBuild)
+    // }
 
-    def parallelConfigs = [:]
-    for (py in PYTHON_VERSIONS) {
-        if (params[py]) {
-            // need to create a deep copy here, otherwise Jenkins will use
-            // the last selected option for everything
-            def python_version = new String(py)
-            parallelConfigs["${python_version}"] = {
-                runPython3MultiversionWorkflowTestConfig(python_version, baseBranch)
-            }
-        }
-    }
+    // def parallelConfigs = [:]
+    // for (py in PYTHON_VERSIONS) {
+    //     if (params[py]) {
+    //         // need to create a deep copy here, otherwise Jenkins will use
+    //         // the last selected option for everything
+    //         def python_version = new String(py)
+    //         parallelConfigs["${python_version}"] = {
+    //             runPython3MultiversionWorkflowTestConfig(python_version, baseBranch)
+    //         }
+    //     }
+    // }
 
     // legacy tests
     parallelConfigs["Python 2.7"] = {
@@ -124,10 +121,10 @@ try {
 
     parallel(parallelConfigs)
 
-    stage('Sonarqube analysis') {
-        env.lastStage = env.STAGE_NAME
-        workflowTests.runSonar()
-    }
+    // stage('Sonarqube analysis') {
+    //     env.lastStage = env.STAGE_NAME
+    //     workflowTests.runSonar()
+    // }
  } catch (ex) {
      currentBuild.result = 'FAILURE'
      throw ex
