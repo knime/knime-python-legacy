@@ -16,6 +16,7 @@ dependencies:
 - nbformat=4.4
 - jpype1=0.6.3
 - h5py=2.8.0
+- absl-py=1.4         # V2.0 no longer supports py3.6
 - numpy
 - scipy
 - cudatoolkit=10.*
