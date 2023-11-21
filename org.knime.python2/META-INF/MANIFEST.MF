@@ -44,6 +44,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)",
  org.knime.rsyntaxtextarea;bundle-version="[5.2.0,6.0.0)",
  org.yaml.snakeyaml;bundle-version="[1.23.0,2.0.0)",
  org.knime.conda;bundle-version="[5.2.0,6.0.0)",
+ org.knime.conda.envbundling;bundle-version="[5.2.0,6.0.0)",
  org.knime.python2.ports;bundle-version="[5.2.0,6.0.0)";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
