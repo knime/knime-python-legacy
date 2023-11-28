@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE knimeNode PUBLIC "-//UNIKN//DTD KNIME Node 2.0//EN" "http://www.inf.uni-konstanz.de/bioml/research/knime/Node.dtd">
 <knimeNode icon="./jpython.gif"  type="Learner">
-	<name>JPython Script 2:1</name>
+	<name>JPython Script 2:1 (Legacy)</name>
 	
 	<shortDescription>
 	    Executes a JPython script, taking 2 input tables and returning 1 output table.

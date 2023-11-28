@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE knimeNode PUBLIC "-//UNIKN//DTD KNIME Node 2.0//EN" "http://www.inf.uni-konstanz.de/bioml/research/knime/Node.dtd">
 <knimeNode icon="./jpython.gif" type="Learner">
-	<name>JPython Function</name>
+	<name>JPython Function (Legacy)</name>
 	
 	<shortDescription>
 	    Executes a JPython function
