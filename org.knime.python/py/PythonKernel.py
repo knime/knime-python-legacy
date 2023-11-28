@@ -47,6 +47,18 @@ try:
 except ImportError:
     _tslib_available = False
 
+if _python3:
+    # When we use pyarrow we need to apply the following hotfix to avoid the CVE-2023-47248
+    # see https://www.cve.org/CVERecord?id=CVE-2023-47248
+
+    try:
+        import pyarrow_hotfix
+
+    except ImportError:
+        pass
+
+
+
 # load jedi for auto completion if available
 try:
     import jedi

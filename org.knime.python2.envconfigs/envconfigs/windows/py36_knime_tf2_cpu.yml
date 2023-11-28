@@ -12,6 +12,7 @@ dependencies:
 - pillow=5.3
 - matplotlib=3.0
 - pyarrow>=5.0.0
+- pyarrow-hotfix      # PyArrow Hotfix
 - IPython=7.1
 - nbformat=4.4
 - jpype1=0.6.3
