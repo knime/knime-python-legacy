@@ -14,6 +14,7 @@ dependencies:            # List of packages that should be installed
 - pillow                 # Image inputs/outputs
 - matplotlib             # Plotting
 - pyarrow=6.0            # Arrow serialization
+- pyarrow-hotfix         # PyArrow Hotfix
 - IPython                # Notebook support
 - nbformat               # Notebook support
 - scipy                  # Notebook support
@@ -23,4 +24,3 @@ dependencies:            # List of packages that should be installed
 - protobuf>3.12
 - libiconv               # MDF Reader node
 - asammdf=5.19.14        # MDF Reader node
-- pip

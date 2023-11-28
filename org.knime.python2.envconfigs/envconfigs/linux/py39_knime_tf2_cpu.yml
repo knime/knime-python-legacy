@@ -13,6 +13,7 @@ dependencies:            # List of packages that should be installed
 - pillow                 # Image inputs/outputs
 - matplotlib             # Plotting
 - pyarrow=6.0            # Arrow serialization
+- pyarrow-hotfix         # pyarrow_hotfix
 - IPython                # Notebook support
 - nbformat               # Notebook support
 - scipy                  # Notebook support
