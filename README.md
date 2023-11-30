@@ -1,4 +1,9 @@
-# ![Image](https://www.knime.com/files/knime_logo_github_40x40_4layers.png) KNIME® - Python Legacy
+# KNIME® Python Legacy
+
+[![Jenkins](https://jenkins.knime.com/buildStatus/icon?job=knime-python-legacy%2Fmaster)](https://jenkins.knime.com/job/knime-python-legacy/job/master/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KNIME_knime-python-legacy&metric=alert_status&token=55129ac721eacd76417f57921368ed587ad8339d)](https://sonarcloud.io/summary/new_code?id=KNIME_knime-python-legacy)
+
+This repository is maintained by the [KNIME Team Rakete](mailto:team-rakete@knime.com).
 
 _See the [knime-python](https://github.com/KNIME/knime-python) for the most recent Python Integration._
 
