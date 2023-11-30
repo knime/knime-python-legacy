@@ -53,6 +53,14 @@ import numpy as np
 import pandas
 import pyarrow
 
+# When we use pyarrow < v14.0.1 we need to apply the following hotfix to avoid the CVE-2023-47248
+# see https://www.cve.org/CVERecord?id=CVE-2023-47248
+try:
+    import pyarrow_hotfix
+
+except ImportError:
+    pass
+
 import PythonUtils
 
 try:
