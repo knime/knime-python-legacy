@@ -55,6 +55,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -316,8 +317,14 @@ public final class PickledObjectFileStorePortObject extends FileStorePortObject 
     @Override
     protected void flushToFileStore() throws IOException {
         final File file = getFileStore(0).getFile();
-        try (FileOutputStream out = new FileOutputStream(file)) {
-            getPickledObject().save(out);
+        if (m_pickledObjectFile != null) {
+            if (!m_pickledObjectFile.getFile().equals(file)) { // can this happen?
+                Files.copy(m_pickledObjectFile.getFile().toPath(), file.toPath());
+            }
+        } else {
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                getPickledObject().save(out); // this uses the deprecated saving mechanism, but we load the new version... why?
+            }
         }
     }
 
