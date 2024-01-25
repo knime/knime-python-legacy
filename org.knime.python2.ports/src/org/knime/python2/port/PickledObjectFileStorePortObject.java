@@ -82,6 +82,14 @@ import org.knime.core.node.port.PortTypeRegistry;
 
 /**
  * {@link FileStore}-based port object containing a {@link PickledObject}.
+ * <P>
+ * Note that this class implements two kinds of serialization for pickled objects.
+ * <ul>
+ * <li><b>old-style</b>: Bytes from Python + additional info written to a output stream. This introduces unnecessary
+ * overhead and is therefore deprecated. The implementation is still present to support previously saved port
+ * objects.</li>
+ * <li><b>new-style</b>: File is written directly from Python.</li>
+ * </ul>
  *
  * @author Patrick Winter, KNIME AG, Zurich, Switzerland
  * @author Marcel Wiedenmann, KNIME GmbH, Konstanz, Germany
@@ -318,12 +326,17 @@ public final class PickledObjectFileStorePortObject extends FileStorePortObject 
     protected void flushToFileStore() throws IOException {
         final File file = getFileStore(0).getFile();
         if (m_pickledObjectFile != null) {
-            if (!m_pickledObjectFile.getFile().equals(file)) { // can this happen?
+            // If we have new-style port objects m_pickledObjectFile is never null.
+            // In this case we have to do nothing because the file was already written by Python directly.
+            // To be robust - we copy it if we did not write to the same file but this should not happen.
+            if (!m_pickledObjectFile.getFile().equals(file)) {
                 Files.copy(m_pickledObjectFile.getFile().toPath(), file.toPath());
             }
         } else {
+            // If we have old-style port objects we use the deprecated saving mechanism
+            // based on getPickledObject
             try (FileOutputStream out = new FileOutputStream(file)) {
-                getPickledObject().save(out); // this uses the deprecated saving mechanism, but we load the new version... why?
+                getPickledObject().save(out);
             }
         }
     }
