@@ -78,6 +78,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang.SystemUtils;
 import org.knime.core.data.container.CloseableRowIterator;
+import org.knime.core.data.util.memory.ExternalProcessMemoryWatchdog;
 import org.knime.core.internal.ReferencedFile;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
@@ -285,6 +286,8 @@ public final class Python2KernelBackend implements PythonKernelBackend {
 
     private final boolean m_hasAutocomplete;
 
+    private String m_terminationReason; // will be set if the process is called by our watchdog
+
     /** Used to make kernel operations cancelable. */
     private final ExecutorService m_executorService =
         Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("python-worker-%d").build());
@@ -456,8 +459,16 @@ public final class Python2KernelBackend implements PythonKernelBackend {
         pb.redirectOutput(ProcessBuilder.Redirect.PIPE);
         pb.redirectError(ProcessBuilder.Redirect.PIPE);
 
-        // Start Python.
-        return pb.start();
+        // Start Python and add process to the watchdog so the process can be killed if the system runs low
+        // on resources.
+        var process = pb.start();
+        ExternalProcessMemoryWatchdog.getInstance().trackProcess(process.toHandle(), memoryUsed -> {
+            m_terminationReason =
+                "The Python process was killed to prevent the system from running out of memory (it used "
+                    + memoryUsed / 1024 + "MB).";
+            LOGGER.error(m_terminationReason);
+        });
+        return process;
     }
 
     private void setupRequestHandlers() {
@@ -1391,6 +1402,10 @@ public final class Python2KernelBackend implements PythonKernelBackend {
     }
 
     private PythonIOException getMostSpecificPythonKernelException(final Exception exception) {
+        if (m_terminationReason != null) {
+            return new PythonIOException(m_terminationReason);
+        }
+
         // Unwrap exceptions that occurred during any async execution.
         final Throwable exc = PythonUtils.Misc.unwrapExecutionException(exception).orElse(exception);
         if (exc instanceof PythonIOException) {
