@@ -7,3 +7,5 @@
 */log
 */*.jar
 **/CHANGELOG.md
+*/.polyglot.feature.xml
+*/.polyglot.META-INF
