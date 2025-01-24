@@ -369,5 +369,10 @@ public abstract class AbstractCondaEnvironmentCreationObserver {
         protected void handleErrorMessage(final String message) {
             m_status.m_errorLog.setStringValue(m_status.m_errorLog.getStringValue() + message + "\n");
         }
+
+        @Override
+        public void setProgressMessage(final String msg) {
+            m_status.m_statusMessage.setStringValue(msg);
+        }
     }
 }
