@@ -78,8 +78,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang.SystemUtils;
 import org.knime.core.data.container.CloseableRowIterator;
-import org.knime.core.data.util.memory.ExternalProcessMemoryWatchdog;
 import org.knime.core.internal.ReferencedFile;
+import org.knime.core.monitor.ExternalProcessType;
+import org.knime.core.monitor.ProcessWatchdog;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -462,12 +463,13 @@ public final class Python2KernelBackend implements PythonKernelBackend {
         // Start Python and add process to the watchdog so the process can be killed if the system runs low
         // on resources.
         var process = pb.start();
-        ExternalProcessMemoryWatchdog.getInstance().trackProcess(process.toHandle(), memoryUsed -> {
-            m_terminationReason =
-                "The Python process was killed to prevent the system from running out of memory (it used "
-                    + memoryUsed / 1024 + "MB).";
-            LOGGER.error(m_terminationReason);
-        });
+        ProcessWatchdog.getInstance().trackProcess(process.toHandle(), ExternalProcessType.PYTHON_LEGACY,
+            memoryUsed -> {
+                m_terminationReason =
+                    "The Python process was killed to prevent the system from running out of memory (it used "
+                        + memoryUsed / 1024 + "MB).";
+                LOGGER.error(m_terminationReason);
+            });
         return process;
     }
 
