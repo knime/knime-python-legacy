@@ -51,7 +51,6 @@
 
 # This should be the first statement in each module (except for __future__ statements) that makes specific demands on
 # the Python environment.
-from numpy import string_
 import EnvironmentHelper
 
 if EnvironmentHelper.is_python3():
