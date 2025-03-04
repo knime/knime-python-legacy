@@ -355,6 +355,11 @@ class _DefaultPythonKernelTester(PythonKernelTester):
             self.check_module('io')
         else:
             self.check_module('StringIO')
+
+        if EnvironmentHelper.is_python34():
+            self.check_module("importlib")
+        else:
+            self.check_module("imp")
         self.check_module('datetime', class_names=['datetime'])
         self.check_module('math')
         self.check_module('socket')
@@ -362,8 +367,7 @@ class _DefaultPythonKernelTester(PythonKernelTester):
         self.check_module('base64')
         self.check_module('traceback')
         self.check_module('os')
-        self.check_module('pickle')
-        self.check_module('imp')
+        self.check_module("pickle")
         self.check_module('types')
         # Non-standard modules.
         self.check_module('numpy')

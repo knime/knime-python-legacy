@@ -57,6 +57,8 @@ module catch BaseException.
 import sys
 
 _is_python3 = sys.version_info >= (3, 0)
+_is_python34 = sys.version_info >= (3, 4)
+
 if not _is_python3:
     reload(sys)
     sys.setdefaultencoding('utf-8')  # Available after reloading.
@@ -99,6 +101,10 @@ if not _is_tslib_available:
 
 def is_python3():
     return _is_python3
+
+
+def is_python34():
+    return _is_python34
 
 
 def is_jedi_available():
