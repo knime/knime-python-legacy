@@ -16,7 +16,6 @@
  compatibility helpers for numpy. """
 
 import sys
-import imp
 
 PY2 = sys.version_info[0] == 2
 PY26 = sys.version_info[0:2] == (2, 6)
@@ -52,11 +51,19 @@ def import_numpy():
     Returns the numpy module if it exists on the system,
     otherwise returns None.
     """
-    try:
-        imp.find_module('numpy')
-        numpy_exists = True
-    except ImportError:
-        numpy_exists = False
+    if PY34:
+        # importlib with find_spec was added in Python 3.4
+        import importlib.util
+
+        numpy_exists = importlib.util.find_spec("numpy")
+    else:
+        try:
+            import imp
+
+            imp.find_module("numpy")
+            numpy_exists = True
+        except ImportError:
+            numpy_exists = False
 
     if numpy_exists:
         # We do this outside of try/except block in case numpy exists
