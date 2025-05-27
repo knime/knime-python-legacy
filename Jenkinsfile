@@ -235,7 +235,6 @@ def runPython27WorkflowTests(String baseBranch){
             dependencies: [
                 repositories: [
                     'knime-chemistry',
-                    'knime-python',
                     'knime-credentials-base',
                     'knime-database',
                     'knime-gateway',
@@ -249,6 +248,7 @@ def runPython27WorkflowTests(String baseBranch){
                     'knime-js-base',
                     'knime-kerberos',
                     'knime-python-legacy',
+                    'knime-python-types',
                     'knime-core-columnar',
                     'knime-testing-internal',
                     'knime-xml',
@@ -283,7 +283,6 @@ def runPython3MultiversionWorkflowTestConfig(String pythonVersion, String baseBr
                 dependencies: [
                     repositories: [
                         'knime-chemistry',
-                        'knime-python',
                         'knime-database',
                         'knime-office365',
                         'knime-datageneration',
@@ -295,6 +294,7 @@ def runPython3MultiversionWorkflowTestConfig(String pythonVersion, String baseBr
                         'knime-js-base',
                         'knime-kerberos',
                         'knime-python-legacy',
+                        'knime-python-types',
                         'knime-core-columnar',
                         'knime-testing-internal',
                         'knime-xml',
