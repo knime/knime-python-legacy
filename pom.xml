@@ -37,6 +37,7 @@
 		<module>org.knime.python2.serde.arrow.tests</module>
 		<module>org.knime.python2.serde.csv</module>
 		<module>org.knime.python2.serde.csv.tests</module>
+		<module>org.knime.python2.serde.flatbuffers/lib/fetch_jars</module>
 		<module>org.knime.python2.serde.flatbuffers</module>
 		<module>org.knime.python2.serde.flatbuffers.tests</module>
 		<module>org.knime.python.nodes</module>

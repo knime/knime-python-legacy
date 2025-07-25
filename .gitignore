@@ -9,3 +9,4 @@
 **/CHANGELOG.md
 */.polyglot.feature.xml
 */.polyglot.META-INF
+org.knime.python2.serde.flatbuffers/lib/*.jar
