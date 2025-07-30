@@ -46,7 +46,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.7.0,4.0.0)",
  org.knime.conda;bundle-version="[5.6.0,6.0.0)",
  org.knime.conda.envbundling;bundle-version="[5.6.0,6.0.0)",
  org.knime.python2.ports;bundle-version="[5.6.0,6.0.0)";visibility:=reexport
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Eclipse-ExtensibleAPI: true
 Eclipse-BundleShape: dir

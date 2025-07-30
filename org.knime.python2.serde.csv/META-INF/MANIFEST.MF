@@ -10,6 +10,6 @@ Require-Bundle: org.knime.python2;bundle-version="[5.6.0,6.0.0)",
   org.knime.core;bundle-version="[5.6.0,6.0.0)",
   org.apache.commons.lang3;bundle-version="[3.2.1,4.0.0)",
   com.google.guava;bundle-version="[19.0.0,19.0.0]"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Eclipse-BundleShape: dir
 Automatic-Module-Name: org.knime.python2.serde.csv
