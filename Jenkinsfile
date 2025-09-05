@@ -43,16 +43,8 @@ static final String[] PYTHON_WIN_64_ENV = [
 *  MacOS Enviroments
 */
 @groovy.transform.Field
-static final String[] PYTHON_MAC_64_ENV = [
-    'py27_knime',
-    'py36_knime_dl_cpu',
-    'py36_knime_tf2_cpu',
-    'py36_knime',
-    'py37_knime_dl_cpu',
-    'py37_knime',
-    'py38_knime_tf2_cpu',
+static final String[] PYTHON_MAC_ARM64_ENV = [
     'py38_knime',
-    'py39_knime_tf2_cpu',
     'py39_knime'
 ]
 
@@ -78,7 +70,7 @@ try {
     if (params.testEnvironmentCreation) {
         // Build in Sequence for MacOS
         node('macosx && workflow-tests && python3') {
-            for (envFile in PYTHON_MAC_64_ENV) {
+            for (envFile in PYTHON_MAC_ARM64_ENV) {
                 String envString = new String(envFile)
                 buildCondaEnvironmentMac(envString)
             }
