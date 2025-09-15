@@ -75,7 +75,7 @@ public class PythonScriptNodeModel extends NodeModel
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("from org.knime.core.data import *\n");
 		buffer.append("from org.knime.core.data.def import *\n");
-		buffer.append("from org.knime.base.data.append.column import *\n");
+		buffer.append("from org.knime.core.data.append import AppendedColumnRow\n");
 		buffer.append("from org.knime.base import *\n");
 		buffer.append("\n");
 		buffer.append("def val(colname, rowinstance, inport=0) :\n");
