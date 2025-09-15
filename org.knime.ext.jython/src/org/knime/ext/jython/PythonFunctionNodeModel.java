@@ -21,7 +21,7 @@ public class PythonFunctionNodeModel extends PythonScriptNodeModel
 		StringBuffer header = new StringBuffer();
 		header.append("from org.knime.core.data import *\n");
 		header.append("from org.knime.core.data.def import *\n");
-		header.append("from org.knime.base.data.append.column import *\n");
+		header.append("from org.knime.core.data.append import AppendedColumnRow\n");
 		header.append("from org.knime.base import *\n");
 		header.append("\n");
 		header.append("__dts = inData0.getDataTableSpec()\n");
