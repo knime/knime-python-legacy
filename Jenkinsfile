@@ -252,9 +252,15 @@ def runPython27WorkflowTests(String baseBranch){
                     'knime-core-columnar',
                     'knime-testing-internal',
                     'knime-xml',
-                    'knime-conda'
+                    'knime-conda',
+                    'knime-cef',
+                    'knime-hubclient-sdk'
+                    
                 ],
-                ius: [ 'org.knime.features.ext.jython.feature.group', 'org.knime.features.chem.types.feature.group' ]
+                ius: [ 'org.knime.features.ext.jython.feature.group', 
+                       'org.knime.features.chem.types.feature.group', 
+                       'org.knime.features.database.feature.group' 
+                    ]
             ],
             extraNodeLabel: 'python2',
             sidecarContainers: [
