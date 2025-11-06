@@ -65,7 +65,7 @@ static final String[] PYTHON_LINUX_ENV = [
 ]
 
 try {
-    knimetools.defaultTychoBuild('org.knime.update.python.legacy', 'maven && python2 && python3 && java17')
+    knimetools.defaultTychoBuild('org.knime.update.python.legacy', 'maven && python2 && python3 && java21')
 
     if (params.testEnvironmentCreation) {
         // Build in Sequence for MacOS
