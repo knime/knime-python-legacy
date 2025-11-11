@@ -247,7 +247,6 @@ def runPython27WorkflowTests(String baseBranch){
                     'knime-conda',
                     'knime-cef',
                     'knime-hubclient-sdk',
-                    'knime-scripting-editor'
                 ],
                 ius: [ 'org.knime.features.ext.jython.feature.group', 
                        'org.knime.features.chem.types.feature.group', 
