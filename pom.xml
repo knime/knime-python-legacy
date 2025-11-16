@@ -48,6 +48,16 @@
 	<!-- List all required repositories here. The variables are defined in knime-maven-parent/pom.xml. -->
 	<repositories>
 		<repository>
+			<id>p2-knime-base</id>
+			<layout>p2</layout>
+			<url>${knime.base.p2}</url>
+		</repository>
+		<repository>
+			<id>p2-knime-conda</id>
+			<layout>p2</layout>
+			<url>${knime.conda.p2}</url>
+		</repository>
+		<repository>
 			<id>p2-knime-core</id>
 			<layout>p2</layout>
 			<url>${knime.core.p2}</url>
@@ -56,11 +66,6 @@
 			<id>p2-knime-core-ui</id>
 			<layout>p2</layout>
 			<url>${knime.core.ui.p2}</url>
-		</repository>
-		<repository>
-			<id>p2-knime-base</id>
-			<layout>p2</layout>
-			<url>${knime.base.p2}</url>
 		</repository>
 		<repository>
 			<id>p2-knime-expressions</id>
@@ -73,19 +78,24 @@
 			<url>${knime.filehandling.p2}</url>
 		</repository>
 		<repository>
-			<id>p2-knime-workbench</id>
+			<id>p2-knime-filehandling-core</id>
 			<layout>p2</layout>
-			<url>${knime.workbench.p2}</url>
+			<url>${knime.filehandling.core.p2}</url>
 		</repository>
 		<repository>
-			<id>p2-knime-svg</id>
+			<id>p2-knime-gateway</id>
 			<layout>p2</layout>
-			<url>${knime.svg.p2}</url>
+			<url>${knime.gateway.p2}</url>
 		</repository>
 		<repository>
-			<id>p2-knime-conda</id>
+			<id>p2-knime-js-core</id>
 			<layout>p2</layout>
-			<url>${knime.conda.p2}</url>
+			<url>${knime.js.core.p2}</url>
+		</repository>
+		<repository>
+			<id>p2-knime-product</id>
+			<layout>p2</layout>
+			<url>${knime.product.p2}</url>
 		</repository>
 		<repository>
 			<id>p2-knime-shared</id>
@@ -93,27 +103,32 @@
 			<url>${knime.shared.p2}</url>
 		</repository>
 		<repository>
+			<id>p2-knime-svg</id>
+			<layout>p2</layout>
+			<url>${knime.svg.p2}</url>
+		</repository>
+		<repository>
 			<id>p2-knime-tp</id>
 			<layout>p2</layout>
 			<url>${knime.tp.p2}</url>
 		</repository>
 		<repository>
-			<id>p2-knime-filehandling-core</id>
+			<id>p2-knime-workbench</id>
 			<layout>p2</layout>
-			<url>${knime.filehandling.core.p2}</url>
+			<url>${knime.workbench.p2}</url>
 		</repository>
 	</repositories>
 
 	<build>
 		<plugins>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-surefire-plugin</artifactId>
-                <configuration>
-                    <!-- org.knime.python2.tests currently only has abstract test classes -->
-                    <failIfNoTests>false</failIfNoTests>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+					<!-- org.knime.python2.tests currently only has abstract test classes -->
+					<failIfNoTests>false</failIfNoTests>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
